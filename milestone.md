@@ -1,11 +1,12 @@
 ---
 layout: page
 title: "milestone"
-description: "代表作"
+description: "正在努力成就一些东西"
 header-img: "img/zhihu.jpg"
 ---
 
-这个页面放置你的代表作。
+不过，  
+现在还没有。
 
 
 
