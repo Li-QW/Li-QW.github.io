@@ -1,6 +1,23 @@
-# 小我 | XiǎoWǒ
-## 写在起始  
-2018-3-21
-> 一切痛苦，都源于恐惧；所有恐惧，都源于认知的空缺。  
+## 说明
 
-当陶醉于美好时光或为琐事疲累，某一瞬间会突然觉得自身是如此的渺小和短暂，抓不住的时光匆匆冲刷着留下的任何痕迹。于是开始重新认识自己，用更深的知识来消弭对这种不确定性的恐惧。厌于苛求万物本质，把握总体，不求甚解，期待积跬步而成大变化。
+此博客模板 Fork 自仓库：[cnfeat/blog.io: 简单直接可用博客模板](https://github.com/cnfeat/blog.io)
+
+配套说用说明：[如何搭建一个独立博客——简明 GitHub Pages与 jekyll 教程 - 读立写生](http://www.cnfeat.com/blog/2014/05/10/how-to-build-a-blog/)
+
+## 博客模板修订清单
+
+文档内有详细注释，可按注释逐个修订
+
+* 博客名字、作者信息、浏览器小图标等：_config.yml 
+* 个人介绍页面：about.md
+* 代表作页面：milestone.md
+* 文章模板：blog.io/_posts/2015-03-02-how-to-write.md 
+* 
+
+## 模板作者
+
+陈素封，博客：独立写生：[cnfeat.com](cnfeat.com)
+
+联系方式：cnfeat@gmail.com
+
+
