@@ -3,7 +3,7 @@ layout: post
 title: CANopenNode学习（2/2）
 date: 2018-3-22
 categories: blog
-tags: [CANopen，CANopenNode，学习，代码，]
+tags: [CANopen,CANopenNode,学习,代码]
 description: 学习使用CANopenNode开源库开发CANopen网络。
 ---
 > 学习CANopenNode的最终目的是：结合其API在PIC18F单片机上开发CANopen通信节点，并采集、传递和处理信号。  

@@ -3,7 +3,7 @@ layout: post
 title: CANopenNode学习（1/2）
 date: 2018-3-21
 categories: blog
-tags: [CANopen，CANopenNode，学习，代码，]
+tags: [CANopen,CANopenNode,学习,代码]
 description: 学习使用CANopenNode开源库开发CANopen网络。
 ---
 > 学习CANopenNode的最终目的是：结合其API在PIC18F单片机上开发CANopen通信节点，并采集、传递和处理信号。  
@@ -25,9 +25,6 @@ CANopenNode V1.1采用许可`GNU Free Documentaion License`.
 [教程][R1]介绍了CANopenNode的大部分功能。 这是相当多的，教程中有很多信息。 源代码已经过测试，所以用户不应该遇到问题。 如果有问题或疑问，请[联系教程原作者][R3]。
 
 
-涉及到的名词：  
-- `Heartbeat`     心跳
-- `NMT`   网络管理
 
 ### 1.1 准备
 1. [CANopenNode 源码](https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/);
@@ -106,31 +103,34 @@ CANopenNode V1.1采用许可`GNU Free Documentaion License`.
 ![][P3-1]
 
 完整Include路径是：
-C：\MCC18\h; 
-C：\CANopenNode\_src\CANopen; 
-C：\CANopenNode\_src\CANopen\PIC18_with_Microchip_C18; 
-C：\CANopenNode\_src\Tutorial_Sensor
+
+    C：\MCC18\h; 
+    C：\CANopenNode\_src\CANopen; 
+    C：\CANopenNode\_src\CANopen\PIC18_with_Microchip_C18; 
+    C：\CANopenNode\_src\Tutorial_Sensor
 
 
-每个工程文件夹包括以下文件：  
+每个工程文件夹包括以下文件：
+
 文件            |说明  
-----------------|-----
-\lesser.txt |许可文件  
-\CANopen\CANopen.h |main 头文件
-\CANopen\CO_errors.h|错误定义
-\CANopen\CO_stack.c|main 代码
-\CANopen\CO_OD.txt|OD-对象字典说明
-\CANopen\PIC18_with_Microchip_C18\CO_driver.h|驱动头文件
-\CANopen\PIC18_with_Microchip_C18\CO_driver.c|处理器特定代码
-\CANopen\PIC18_with_Microchip_C18\main.c|main()与中断函数
-\CANopen\PIC18_with_Microchip_C18\memcpyram2flash.h|写flash
-\CANopen\PIC18_with_Microchip_C18\memcpyram2flash.c|写flash
-\CANopen\PIC18_with_Microchip_C18\CONFIG18f458.c|芯片配置位-可选
-\CANopen\PIC18_with_Microchip_C18\18f458i.lkr|默认链接脚本
-\Tutorial_xxx\CO_OD.h|对象字典头文件
-\Tutorial_xxx\CO_OD.c|对象字典
-\Tutorial_xxx\user.c|用户代码
-\Tutorial_xxx\Tutorial_xxx.eds|EDS文件
+----------------|-----  
+lesser.txt |许可文件   
+CANopen\CANopen.h |main 头文件  
+CANopen\CO_errors.h |错误定义   
+CANopen\CO_stack.c |main 代码  
+CANopen\CO_OD.txt |OD-对象字典说明  
+CANopen\PIC18_with_Microchip_C18\CO_driver.h |驱动头文件  
+CANopen\PIC18_with_Microchip_C18\CO_driver.c |处理器特定代码  
+CANopen\PIC18_with_Microchip_C18\main.c |main()与中断函数  
+CANopen\PIC18_with_Microchip_C18\memcpyram2flash.h |写flash  
+CANopen\PIC18_with_Microchip_C18\memcpyram2flash.c |写flash  
+CANopen\PIC18_with_Microchip_C18\CONFIG18f458.c |芯片配置位-可选  
+CANopen\PIC18_with_Microchip_C18\18f458i.lkr |默认链接脚本  
+Tutorial_xxx\CO_OD.h |对象字典头文件  
+Tutorial_xxx\CO_OD.c |对象字典  
+Tutorial_xxx\user.c |用户代码  
+Tutorial_xxx\Tutorial_xxx.eds |EDS文件  
+
 
 ### 3.2 振荡器和CAN LED设置
 
@@ -139,10 +139,10 @@ C：\CANopenNode\_src\Tutorial_Sensor
 若采用其它频率的振荡器则打开*CO_driver.h*并更改宏`CO_OSCILATOR_FREQ`。另一种方法是在每个项目文件中添加一个宏定义： *Project>Build options>project>MPLAB C18>Macro Definitions>Add...* 并写入`CO_OSCILATOR_FREQ xx`，其中`xx`是振荡器频率，对于每个项目可以不同。
 
 默认情况下，绿色LED（CAN Run led）位于RB4上，红色LED（CAN Error Error led）位于RB5上。引脚在*CO_driver.h*文件中定义，与振荡器的配置在同一部分。引脚也可以在那里改变。如果需要禁用LED，请禁用宏。例如可以将其注释掉：  
-```C
+
+```c
 #define PCB_RUN_LED_INIT()  //{TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 0;}
 #define PCB_RUN_LED(i)      //PORTBbits.RB4 = i
-
 ```
 
 ### 3.3 采集单元编程
@@ -156,7 +156,7 @@ C：\CANopenNode\_src\Tutorial_Sensor
 > OD，0x6401：读AI - 将12x16位值映射到TPDO 1...3。  
 > OD，0x6411：写AO - 将12x16位值映射到RPDO 1...3。  
 
-这里将只使用TPDO 1的两个字节，从索引0x6401，子索引0x01映射。
+这里将只使用TPDO 1的两个字节，从索引0x6401子索引0x01映射。
 
 打开*Tutorial\_Sensor*工程。
 
@@ -165,7 +165,7 @@ C：\CANopenNode\_src\Tutorial_Sensor
 代码以等宽字体显示。与Example_generic_IO的差异已标出。为了更好地理解源代码可以阅读源文件中每行的注释。
 
 *Setup CANopen*部分代码：  
-``` C  
+```c
 #define CO_NO_SYNC              0  //<-
 #define CO_NO_EMERGENCY         1  
 #define CO_NO_RPDO              0  //<-
@@ -186,24 +186,29 @@ C：\CANopenNode\_src\Tutorial_Sensor
 #define CO_SAVE_EEPROM
 #define CO_SAVE_ROM
 ```
+
 在本节中可以定义CANopenNode中使用的特定对象的数量。相同的功能可能被禁用。
 
 在我们的案例中，不使用SYNC对象，不接收PDO，不使用TPDO 0（数字输入），TPDO 1（两字节）用于传输温度传感器的模拟值，不监控其他节点。
 
-*Device profile for Generic I/O*部分配置代码：  
+*Device profile for Generic I/O*部分配置代码：
+
 ```c
-//#define CO_IO_DIGITAL_INPUTS      //4 * 8 digital inputs
-//#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 digital outputs
-#define CO_IO_ANALOG_INPUTS         //8 * 16bit analog inputs
-//#define CO_IO_ANALOG_OUTPUTS      //2 * 16bit analog outputs
+//#define CO_IO_DIGITAL_INPUTS      //4 * 8 digital inputs  
+//#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 digital outputs  
+#define CO_IO_ANALOG_INPUTS         //8 * 16bit analog inputs  
+//#define CO_IO_ANALOG_OUTPUTS      //2 * 16bit analog outputs  
  ```
-*Default values for object dictionary*部分配置代码：  
+
+*Default values for object dictionary*部分配置代码： 
+
 ````c
-#define ODD_PROD_HEARTBEAT  1000
+#define ODD_PROD_HEARTBEAT  1000  
 //...
-#define ODD_ERROR_BEH_COMM  0x01    //<-
-#define ODD_NMT_STARTUP     0x00000000L  
+#define ODD_ERROR_BEH_COMM  0x01    //<-  
+#define ODD_NMT_STARTUP     0x00000000L    
 ````
+
 心跳对象将每秒发送一次。
 
 如果错误寄存器中的通讯错误位（索引1001）被置位并且设备将处于Operational NMT状态，则设备将维持Operational状态。 默认行为是通信错误强制设备处于Pre-Operational NMT状态。
@@ -211,6 +216,7 @@ C：\CANopenNode\_src\Tutorial_Sensor
 在启动设备时进入NMT操作状态。
 
 *0x1800 Transmit PDO parameters*部分配置代码：
+
 ```c
 #define ODD_TPDO_PAR_COB_ID_0   0
 #define ODD_TPDO_PAR_T_TYPE_0   255
@@ -221,9 +227,11 @@ C：\CANopenNode\_src\Tutorial_Sensor
 #define ODD_TPDO_PAR_I_TIME_1   1000    //<-
 #define ODD_TPDO_PAR_E_TIME_1   60000   //<-
 ```
+
 PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（11位CAN标识符）将为默认值 —— 0x280 + Node ID。PDO 1的禁止时间为1000*100μs，因此PDO 1更新将不会比间隔100ms更快。PDO 1将在状态更改和每分钟（60000毫秒）时发送 - 传输类型为255 - 设备配置文件特定。
 
 *0x1A00 Transmit PDO mapping for PDO 1*部分代码:
+
 ```c
 #define ODD_TPDO_MAP_1_1    0x64010110L
 #define ODD_TPDO_MAP_1_2    0x64010200L //<-
@@ -234,8 +242,10 @@ PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（1
 #define ODD_TPDO_MAP_1_7    0x00000000L
 #define ODD_TPDO_MAP_1_8    0x00000000L
 ```
+
 只在TPDO 1中发送一个模拟量，所以在CAN总线上只有两个字节的数据。PDO长度是根据CANopenNode中的映射自动计算的。在每次状态改变时，从变量`ODE_Read_Analog_Input [0]`（位于OD中，索引=0x6401，子索引=1，长度=0x10字节）复制数据。要了解它是如何工作的，看一下来自文件
 *user.c*的示例代码，*Write TPDOs*部分：
+
 ```c
 if(CO_TPDO_InhibitTimer[1] == 0 && (
    CO_TPDO(1).WORD[0] != ODE_Read_Analog_Input[0])){
@@ -247,6 +257,7 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 ```
 
 *Default values for user Object Dictionary Entries*部分:
+
 ```c
     #define ODD_CANnodeID   0x06
     #define ODD_CANbitRate  3
@@ -259,11 +270,13 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 代码以等宽字体显示。与Example_generic_IO的差异已标出。
 
 头文件：
+
 ```c
 #include <adc.h>    //<-
 ```
 
 *User_Init*函数的更改：
+
 ```c
 void User_Init(void){
     // ...
@@ -283,13 +296,15 @@ void User_Init(void){
     // ...
 }
 ```
+
 *User_Process1msIsr function, section Read from Hardware*更改：
+
 ```c
-//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx
-//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[1] = port_xxx
-//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[2] = port_xxx
-//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[3] = port_xxx
-/* 添加 */
+//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx  
+//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[1] = port_xxx  
+//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[2] = port_xxx  
+//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[3] = port_xxx  
+/* 添加 */  
 if(BusyADC() == 0){
     ODE_Read_Analog_Input[0] = ReadADC() >> 2; //8 bit value
     ConvertADC();
@@ -309,8 +324,7 @@ Eds文件是一个文本文件，可以用于CANopen监视器。它现在有一�
 ---
 2018/3/22更新，3.4章及以后的部分见[CANopenNode学习（2/2)][L1]
 
-:snail:
- 
+
 
 [L1]:https://li-qw.github.io/blog/2018/03/22/CANopenNode-learn-2/ "下一部分" 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  
