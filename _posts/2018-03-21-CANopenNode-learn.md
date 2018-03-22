@@ -47,7 +47,7 @@ CANopenNode V1.1采用许可`GNU Free Documentaion License`.
     - 基于通用输入/输出设备配置文件（CiADS401）。
     - 在每次状态改变时传输感测温度，并定期使用事件定时器（TPDO 1）。
     - 每秒产生一次心跳。
-2. 功率单元——由加热器和冷却器制成的空调单元：
+2. 动力装置——由加热器和冷却器制成的空调单元：
     - 从传感器接收温度（RPDO 0）。
     - TempLo和TempHi变量位于“对象字典”中。 可以通过SDO通信对象使用CANopen配置工具访问和更改它们。变量具有保持性（关机后不丢失）。 单位是[℃ 摄氏度]。
     - 打开或关闭冷却器或加热器。决定基于来自传感器，TempLo和TempHi的温度。 如果设备未处于运行状态，则冷却器和加热器将关闭。
@@ -74,7 +74,7 @@ CANopenNode V1.1采用许可`GNU Free Documentaion License`.
     - RB4和GND之间的LED-绿色（CAN Run led），
     - RB5和GND之间的LED-红色（CAN Error led），
     - +5V，GND和RA0之间接5kΩ电位器（模拟温度传感器）。
-2. 功率单元-节点号7：
+2. 动力装置-节点号7：
     - RB4和GND之间的LED-绿色（CAN Run led），
     - RB5和GND之间的LED-红色（CAN Error led），
     - RC4和GND之间的LED-黄色（冷却器开启）;
@@ -95,7 +95,7 @@ CANopenNode V1.1采用许可`GNU Free Documentaion License`.
 
 首先从1.1中的链接下载*CANopenNode-V1.10.zip*。解压文件到C：盘。
 
-压缩包内已经为Microchip MPLAB C18编写了三个工程：*Tutorial_Sensor*，*Tutorial_Power*和*Tutorial_Command*。所有三个工程都使用相同的库文件。每个工程都可以用MPLAB IDE打开。每个项目的编译都必须不能包含错误或警告。
+压缩包内已经为Microchip MPLAB C18编写了三个工程：*Tutorial_Sensor*，*Tutorial_Power*和*Tutorial_Command*。所有三个工程都使用相同的库文件。每个工程都可以用MPLAB IDE打开。每个工程的编译都必须不能包含错误或警告。
 
 *Project>Build options>project>general*中的文件夹设置如图3.1所示。
 
@@ -136,11 +136,11 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 默认情况下，所有MCU都运行在32MHz。这是通过PIC18Fxxx微控制器中的8MHz外部晶振和PLLx4模式实现的。如果使用*CONFIG18f458.c*文件，则利用`#pragma config OSC = HSPLL`设置PLLx4模式，另外也可以在MPLAB IDE中转到*Configure>Configuration bits*并设置OSC：`HS Oscillator, PLL Enable`。如果更改了PLLx4模式设置，则微控制器必须重新上电，更改方可生效。
 
-若采用其它频率的振荡器则打开*CO_driver.h*并更改宏`CO_OSCILATOR_FREQ`。另一种方法是在每个项目文件中添加一个宏定义： *Project>Build options>project>MPLAB C18>Macro Definitions>Add...* 并写入`CO_OSCILATOR_FREQ xx`，其中`xx`是振荡器频率，对于每个项目可以不同。
+若采用其它频率的振荡器则打开*CO_driver.h*并更改宏`CO_OSCILATOR_FREQ`。另一种方法是在每个工程文件中添加一个宏定义： *Project>Build options>project>MPLAB C18>Macro Definitions>Add...* 并写入`CO_OSCILATOR_FREQ xx`，其中`xx`是振荡器频率，对于每个工程可以不同。
 
 默认情况下，绿色LED（CAN Run led）位于RB4上，红色LED（CAN Error Error led）位于RB5上。引脚在*CO_driver.h*文件中定义，与振荡器的配置在同一部分。引脚也可以在那里改变。如果需要禁用LED，请禁用宏。例如可以将其注释掉：  
 
-```c
+```C
 #define PCB_RUN_LED_INIT()  //{TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 0;}
 #define PCB_RUN_LED(i)      //PORTBbits.RB4 = i
 ```
@@ -160,19 +160,20 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 打开*Tutorial\_Sensor*工程。
 
-#### 3.3.1 配置项目 - CO_OD.h文件
+#### 3.3.1 配置工程 - CO_OD.h文件
 
 代码以等宽字体显示。与Example_generic_IO的差异已标出。为了更好地理解源代码可以阅读源文件中每行的注释。
 
-*Setup CANopen*部分代码：  
-```c
-#define CO_NO_SYNC              0  //<-
+*Setup CANopen*部分代码：
+
+```C
+#define CO_NO_SYNC              0  //<<
 #define CO_NO_EMERGENCY         1  
-#define CO_NO_RPDO              0  //<-
-#define CO_NO_TPDO              2  //<-
+#define CO_NO_RPDO              0  //<<
+#define CO_NO_TPDO              2  //<<
 #define CO_NO_SDO_SERVER        1  
 #define CO_NO_SDO_CLIENT        0  
-#define CO_NO_CONS_HEARTBEAT    0  //<-
+#define CO_NO_CONS_HEARTBEAT    0  //<<
 #define CO_NO_USR_CAN_RX        0  
 #define CO_NO_USR_CAN_TX        0  
 #define CO_MAX_OD_ENTRY_SIZE    20  
@@ -193,7 +194,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *Device profile for Generic I/O*部分配置代码：
 
-```c
+```C
 //#define CO_IO_DIGITAL_INPUTS      //4 * 8 digital inputs  
 //#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 digital outputs  
 #define CO_IO_ANALOG_INPUTS         //8 * 16bit analog inputs  
@@ -202,10 +203,10 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *Default values for object dictionary*部分配置代码： 
 
-````c
+````C
 #define ODD_PROD_HEARTBEAT  1000  
 //...
-#define ODD_ERROR_BEH_COMM  0x01    //<-  
+#define ODD_ERROR_BEH_COMM  0x01    //<<  
 #define ODD_NMT_STARTUP     0x00000000L    
 ````
 
@@ -217,26 +218,26 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *0x1800 Transmit PDO parameters*部分配置代码：
 
-```c
+```C
 #define ODD_TPDO_PAR_COB_ID_0   0
 #define ODD_TPDO_PAR_T_TYPE_0   255
 #define ODD_TPDO_PAR_I_TIME_0   0
 #define ODD_TPDO_PAR_E_TIME_0   0
 #define ODD_TPDO_PAR_COB_ID_1   0
 #define ODD_TPDO_PAR_T_TYPE_1   255
-#define ODD_TPDO_PAR_I_TIME_1   1000    //<-
-#define ODD_TPDO_PAR_E_TIME_1   60000   //<-
+#define ODD_TPDO_PAR_I_TIME_1   1000    //<<
+#define ODD_TPDO_PAR_E_TIME_1   60000   //<<
 ```
 
-PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（11位CAN标识符）将为默认值 —— 0x280 + Node ID。PDO 1的禁止时间为1000*100μs，因此PDO 1更新将不会比间隔100ms更快。PDO 1将在状态更改和每分钟（60000毫秒）时发送 - 传输类型为255 - 设备配置文件特定。
+PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（11位CAN标识符）将为默认值 —— 0x280 + Node ID。PDO 1的抑制时间（Inhibit time）为1000*100μs，因此PDO 1更新将不会比间隔100ms更快。PDO 1将在状态更改和每分钟（60000毫秒）时发送 - 传输类型为255 - 设备配置文件特定。
 
 *0x1A00 Transmit PDO mapping for PDO 1*部分代码:
 
-```c
+```C
 #define ODD_TPDO_MAP_1_1    0x64010110L
-#define ODD_TPDO_MAP_1_2    0x64010200L //<-
-#define ODD_TPDO_MAP_1_3    0x64010300L //<-
-#define ODD_TPDO_MAP_1_4    0x64010400L //<-
+#define ODD_TPDO_MAP_1_2    0x64010200L //<<
+#define ODD_TPDO_MAP_1_3    0x64010300L //<<
+#define ODD_TPDO_MAP_1_4    0x64010400L //<<
 #define ODD_TPDO_MAP_1_5    0x00000000L
 #define ODD_TPDO_MAP_1_6    0x00000000L
 #define ODD_TPDO_MAP_1_7    0x00000000L
@@ -246,7 +247,7 @@ PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（1
 只在TPDO 1中发送一个模拟量，所以在CAN总线上只有两个字节的数据。PDO长度是根据CANopenNode中的映射自动计算的。在每次状态改变时，从变量`ODE_Read_Analog_Input [0]`（位于OD中，索引=0x6401，子索引=1，长度=0x10字节）复制数据。要了解它是如何工作的，看一下来自文件
 *user.c*的示例代码，*Write TPDOs*部分：
 
-```c
+```C
 if(CO_TPDO_InhibitTimer[1] == 0 && (
    CO_TPDO(1).WORD[0] != ODE_Read_Analog_Input[0])){
 
@@ -258,12 +259,12 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 
 *Default values for user Object Dictionary Entries*部分:
 
-```c
+```C
     #define ODD_CANnodeID   0x06
     #define ODD_CANbitRate  3
 ```
 
-传感器的节点ID是6，CAN比特率是125kbps。
+采集单元的节点ID是6，CAN比特率是125kbps。
 
 #### 3.3.2 应用程序接口 - User.c文件
 
@@ -271,18 +272,18 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 
 头文件：
 
-```c
-#include <adc.h>    //<-
+```C
+#include <adc.h>    //<<
 ```
 
 *User_Init*函数的更改：
 
-```c
+```C
 void User_Init(void){
     // ...
     #ifdef CO_IO_ANALOG_INPUTS
     OpenADC(ADC_FOSC_RC & ADC_RIGHT_JUST & ADC_1ANA_0REF,
-            ADC_CH0 & ADC_INT_OFF); //<-
+            ADC_CH0 & ADC_INT_OFF); //<<
     ConvertADC();
     ODE_Read_Analog_Input[0] = 0;
     ODE_Read_Analog_Input[1] = 0;
@@ -299,12 +300,17 @@ void User_Init(void){
 
 *User_Process1msIsr function, section Read from Hardware*更改：
 
-```c
-//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx  
+```C
+//CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx 
+
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[1] = port_xxx  
+
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[2] = port_xxx  
+
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[3] = port_xxx  
+
 /* 添加 */  
+
 if(BusyADC() == 0){
     ODE_Read_Analog_Input[0] = ReadADC() >> 2; //8 bit value
     ConvertADC();
@@ -319,7 +325,7 @@ Eds文件是一个文本文件，可以用于CANopen监视器。它现在有一�
 
 #### 3.3.3 编译，下载和测试
 
-编译项目并下载到PIC MCU。现在将MCU断电并重新上电，以确保PLLx4模式启用。先不要连接到网络。上电后绿色的*Green CAN run led*应该点亮。这意味着NMT的运行状态是Operational。红色的*Red CAN error led*应该闪烁一次，这意味着，CAN总线是被动的。如果您在CAN_LO和CAN_HI信号上短路，则红色*Red CAN error led*灯将点亮，这表明CAN总线关闭。由于通讯错误，传感器并不会离开Operational状态。在我们的方案中，这是正常的。
+编译工程并下载到PIC MCU。现在将MCU断电并重新上电，以确保PLLx4模式启用。先不要连接到网络。上电后绿色的*Green CAN run led*应该点亮。这意味着NMT的运行状态是Operational。红色的*Red CAN error led*应该闪烁一次，这意味着，CAN总线是被动的。如果您在CAN_LO和CAN_HI信号上短路，则红色*Red CAN error led*灯将点亮，这表明CAN总线关闭。由于通讯错误，传感器并不会离开Operational状态。在我们的方案中，这是正常的。
 
 ---
 2018/3/22更新，3.4章及以后的部分见[CANopenNode学习（2/2)][L1]
