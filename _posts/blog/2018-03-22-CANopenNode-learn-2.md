@@ -16,7 +16,7 @@ description: 学习使用CANopenNode开源库开发CANopen网络。
 
 CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 
-接上文：[CANopenNode学习（1）][L0]
+接上文：[CANopenNode学习（1）][L1]
 
 ### 3.4 动力装置的编程
 
@@ -88,10 +88,10 @@ case 0x3001: //TempHi
 将变量添加到对象字典。此时要留心，索引和子索引必须在整个 CO_OD 数组中排序。在 *Manufacturer specific* 部分添加代码：
 
 ```c
-OD_ENTRY(0x3000， 0x00， ATTR_RW|ATTR_ROM， TempLo)，
-OD_ENTRY(0x3001， 0x00， ATTR_RW|ATTR_ROM， TempHi)，
-OD_ENTRY(0x3100， 0x00， ATTR_RO， Status)，
-OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
+OD_ENTRY(0x3000, 0x00, ATTR_RW|ATTR_ROM, TempLo),
+OD_ENTRY(0x3001, 0x00, ATTR_RW|ATTR_ROM, TempHi),
+OD_ENTRY(0x3100, 0x00, ATTR_RO, Status),
+OD_ENTRY(0x3200, 0x00, ATTR_RWW, RemoteTemperature),
 ```
 
 关于 *CO_OD.c* 文件的部分在这里就结束了。在 *CO_OD.h* 中将声明上面的变量和PDO映射。在 *User.c* 中将使用变量，并触发TPDO。
