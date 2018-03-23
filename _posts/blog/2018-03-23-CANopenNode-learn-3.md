@@ -1,7 +1,7 @@
 ---
 layout: post
 title: CANopenNode学习（3）
-date: 2018-3-22
+date: 2018-3-23
 categories: blog
 tags: [CANopen，CANopenNode，学习，代码]
 description: 学习使用CANopenNode开源库开发CANopen网络。

@@ -140,7 +140,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 默认情况下，绿色LED（CAN Run led）位于RB4上，红色LED（CAN Error Error led）位于RB5上。引脚在*CO_driver.h*文件中定义，与振荡器的配置在同一部分。引脚也可以在那里改变。如果需要禁用LED，请禁用宏。例如可以将其注释掉：  
 
-```C
+```c
 #define PCB_RUN_LED_INIT()  //{TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 0;}
 #define PCB_RUN_LED(i)      //PORTBbits.RB4 = i
 ```
@@ -166,7 +166,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *Setup CANopen*部分代码：
 
-```C
+```c
 #define CO_NO_SYNC              0  //<<
 #define CO_NO_EMERGENCY         1  
 #define CO_NO_RPDO              0  //<<
@@ -194,7 +194,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *Device profile for Generic I/O*部分配置代码：
 
-```C
+```c
 //#define CO_IO_DIGITAL_INPUTS      //4 * 8 digital inputs  
 //#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 digital outputs  
 #define CO_IO_ANALOG_INPUTS         //8 * 16bit analog inputs  
@@ -203,7 +203,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *Default values for object dictionary*部分配置代码： 
 
-````C
+````c
 #define ODD_PROD_HEARTBEAT  1000  
 //...
 #define ODD_ERROR_BEH_COMM  0x01    //<<  
@@ -218,7 +218,7 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 *0x1800 Transmit PDO parameters*部分配置代码：
 
-```C
+```c
 #define ODD_TPDO_PAR_COB_ID_0   0
 #define ODD_TPDO_PAR_T_TYPE_0   255
 #define ODD_TPDO_PAR_I_TIME_0   0
@@ -233,7 +233,7 @@ PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（1
 
 *0x1A00 Transmit PDO mapping for PDO 1*部分代码:
 
-```C
+```c
 #define ODD_TPDO_MAP_1_1    0x64010110L
 #define ODD_TPDO_MAP_1_2    0x64010200L //<<
 #define ODD_TPDO_MAP_1_3    0x64010300L //<<
@@ -247,7 +247,7 @@ PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（1
 只在TPDO 1中发送一个模拟量，所以在CAN总线上只有两个字节的数据。PDO长度是根据CANopenNode中的映射自动计算的。在每次状态改变时，从变量`ODE_Read_Analog_Input [0]`（位于OD中，索引=0x6401，子索引=1，长度=0x10字节）复制数据。要了解它是如何工作的，看一下来自文件
 *user.c*的示例代码，*Write TPDOs*部分：
 
-```C
+```c
 if(CO_TPDO_InhibitTimer[1] == 0 && (
    CO_TPDO(1).WORD[0] != ODE_Read_Analog_Input[0])){
 
@@ -259,7 +259,7 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 
 *Default values for user Object Dictionary Entries*部分:
 
-```C
+```c
     #define ODD_CANnodeID   0x06
     #define ODD_CANbitRate  3
 ```
@@ -272,13 +272,13 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 
 头文件：
 
-```C
+```c
 #include <adc.h>    //<<
 ```
 
 *User_Init*函数的更改：
 
-```C
+```c
 void User_Init(void){
     // ...
     #ifdef CO_IO_ANALOG_INPUTS
@@ -300,7 +300,7 @@ void User_Init(void){
 
 *User_Process1msIsr function, section Read from Hardware*更改：
 
-```C
+```c
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx 
 
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[1] = port_xxx  

@@ -72,7 +72,7 @@ if(CO_RPDO_New(0)){
 
 确认写入对象字典的值，在 `CO_OD_VerifyWrite` 函数中添加代码：
 
-```C
+```c
 case 0x3000: //TempLo
     if((*((unsigned int*)data) > 35) ||
        (*((unsigned int*)data) >= TempHi))
@@ -87,7 +87,7 @@ case 0x3001: //TempHi
 
 将变量添加到对象字典。此时要留心，索引和子索引必须在整个 CO_OD 数组中排序。在 *Manufacturer specific* 部分添加代码：
 
-```C
+```c
 OD_ENTRY(0x3000， 0x00， ATTR_RW|ATTR_ROM， TempLo)，
 OD_ENTRY(0x3001， 0x00， ATTR_RW|ATTR_ROM， TempHi)，
 OD_ENTRY(0x3100， 0x00， ATTR_RO， Status)，
@@ -102,7 +102,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 
 *Setup CANopen* 部分代码：
 
-```C
+```c
 #define CO_NO_SYNC              0   //<<
 #define CO_NO_EMERGENCY         1   
 #define CO_NO_RPDO              1   //<<
@@ -130,7 +130,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 
 *Heartbeat consumer* 部分代码如下：
 
-```C
+```c
 #define ODD_CONS_HEARTBEAT_0    0x000605DCL //<<
 #define ODD_CONS_HEARTBEAT_1    0x000805DCL //<<
 ```
@@ -139,7 +139,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 
 *0x1400 Receive PDO parameters* 部分代码：
 
-```C
+```c
 #define ODD_RPDO_PAR_COB_ID_0   0x40000286L //<<
 #define ODD_RPDO_PAR_T_TYPE_0   255
 ```
@@ -147,7 +147,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 节点会直接从采集单元（COB-ID = 0x286）接收 PDO。
 
 *0x1600 Receive PDO mapping* 部分代码：
-```C
+```c
 #define ODD_RPDO_MAP_0_1 0x32000010L    //<<
 #define ODD_RPDO_MAP_0_2 0x00000000L
 #define ODD_RPDO_MAP_0_3 0x00000000L
@@ -162,7 +162,7 @@ RPDO0 的长度是两字节。接收的 PDO 必须具有同样的长度，就像
 
 *0x1800 Transmit PDO parameters* 部分代码：
 
-```C
+```c
 #define ODD_TPDO_PAR_COB_ID_0   0
 #define ODD_TPDO_PAR_T_TYPE_0   254
 #define ODD_TPDO_PAR_I_TIME_0   100     //<<
@@ -188,7 +188,7 @@ TPDO 0 的长度是 1 字节（8 位）。TPDO 数据也可以通过对象字典
 
 *Default values for user Object Dictionary Entries* 部分代码：
 
-```C
+```c
 #define ODD_CANnodeID   0x07    //<<
 #define ODD_CANbitRate  3
 ```
@@ -201,7 +201,7 @@ TPDO 0 的长度是 1 字节（8 位）。TPDO 数据也可以通过对象字典
 
 头文件中的部分定义：
 
-```C
+```c
 #include "CANopen.h"
 /*0x3000*/ extern ROM UNSIGNED16    TempLo;
 /*0x3001*/ extern ROM UNSIGNED16    TempHi;
@@ -218,7 +218,7 @@ TPDO 0 的长度是 1 字节（8 位）。TPDO 数据也可以通过对象字典
 
 更改 `User_Init` 函数：
 
-```C
+```c
 void User_Init(void){
     ODE_EEPROM.PowerOnCounter++;
 
@@ -229,7 +229,7 @@ void User_Init(void){
 
 更改 `User_Process1msIsr` 函数：
 
-```C++
+```c++
 void User_Process1msIsr(void){
     // 对于状态变化的传输Inhibit timer是必要的
     extern volatile unsigned int CO_TPDO_InhibitTimer[];
