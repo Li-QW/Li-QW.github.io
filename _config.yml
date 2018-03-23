@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: http://li-qw.github.io
+url: https://li-qw.github.io
 date_format: "ordinal"
 title: 小我 | Xiaowo
 subtitle: "学而思"
