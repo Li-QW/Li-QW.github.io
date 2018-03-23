@@ -35,21 +35,21 @@ CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 0x3100， 0x00 |`Status` |UNSIGNED 8  |RAM        |Read only  
 0x3200， 0x00 |`RemoteTemperature` |UNSIGNED 16 |RAM |  Read/Write  
 
-`TempLo`单位是摄氏度，若温度低于它，则加热器打开。同样`TempHi`单位也是摄氏度，温度比它高时，冷却器打开。`TempLo`和`TempHi`都是保持性的，并且与PDO没有关系。它们可以从网络端（通过SDO客户端）写入，但不能通过程序直接更改。 在写入期间，微控制器被冻结约20ms。 作为保持性变量的替代方法，可以将EEPROM与RAM结合使用。例如变量`PowerOnCounter`。
+`TempLo` 单位是摄氏度，若温度低于它，则加热器打开。同样 `TempHi` 单位也是摄氏度，温度比它高时，冷却器打开。`TempLo` 和 `TempHi` 都是保持性的，并且与PDO没有关系。它们可以从网络端（通过SDO客户端）写入，但不能通过程序直接更改。 在写入期间，微控制器被冻结约20ms。作为保持性变量的替代方法，可以将EEPROM与RAM结合使用。例如变量 `PowerOnCounter`。
 
-`Status`和`RemoteTemperature`是两个RAM变量，可以映射到PDO。这里讨论了PDO和变量之间连接的不同方法。
+`Status` 和 `RemoteTemperature` 是两个RAM变量，可以映射到 PDO。这里讨论了 PDO 和变量之间连接的不同方法。
 
-`Status`包含有关加热器和冷却器的状态信息。它有自己的变量。稍后会显示代码，它将确定状态的变化，然后将变量的内容复制到TPDO并触发PDO。
+`Status` 包含有关加热器和冷却器的状态信息。它有自己的变量。稍后会显示代码，它将确定状态的变化，然后将变量的内容复制到 TPDO 并触发 PDO。
 
-`RemoteTemperature`是从远程传感器接收的以摄氏度为单位的温度。它使用来自RPDO 0的前两个字节的内存。所以当RPDO到达时，可以立即读取`RemoteTemperature`而无需另外复制。
+`RemoteTemperature` 是从远程传感器接收的以摄氏度为单位的温度。它使用来自 RPDO 0 的前两个字节的内存。所以当 RPDO 到达时，可以立即读取 `RemoteTemperature` 而无需另外复制。
 
-`Status`使用自己的变量并不是规定的。它也可以使用TPDO中的内存，与`RemoteTemperature`相似。它可以由事件定时器触发。但是不可能确定状态的改变。
+`Status` 使用自己的变量并不是规定的。它也可以使用 TPDO 中的内存，与 `RemoteTemperature` 相似。它可以由事件定时器触发。但是不可能确定状态的改变。
 
-有时需要对RPDO使用单独的变量。如果程序正在读取RPDO数据，而RPDO到达并以高优先级中断进行处理，然后程序读取后半部分数据，则可能会有危险。程序有一半来自旧RPDO数据，一半来自新RPDO！因此最好在读取期间禁用中断。在我们的案例中，这不是必需的，因为我们只使用一个字节。
+有时需要对 RPDO 使用单独的变量。如果程序正在读取 RPDO 数据，而 RPDO 到达并以高优先级中断进行处理，然后程序读取后半部分数据，则可能会有危险。程序有一半来自旧 RPDO 数据，一半来自新 RPDO！因此最好在读取期间禁用中断。在我们的案例中，这不是必需的，因为我们只使用一个字节。
 
-从低优先级定时器中断函数安全读取RPDO，示例如下：
+从低优先级定时器中断函数安全读取 RPDO，示例如下：
 
-```C
+```c
 if(CO_RPDO_New(0)){
     CO_DISABLE_CANRX_TMR();
     ODE_Write_Digital_Output.DWORD[0] = CO_RPDO(0).DWORD[0];
@@ -58,19 +58,19 @@ if(CO_RPDO_New(0)){
 }
 ```
 
-变量定义并赋初值。在*Manufacturer specific variables*部分添加代码：
+变量定义并赋初值。在 *Manufacturer specific variables* 部分添加代码：
 
-```C
+```c
 /*0x3000*/  ROM UNSIGNED16 TempLo = 18;
-            //低于此值加热器打开
+            // 低于此值加热器打开
 /*0x3001*/  ROM UNSIGNED16 TempHi = 25;
-            //高于此值冷却器开启
+            // 高于此值冷却器开启
 /*0x3100*/  tData1byte Status = 0;
 /*0x3200*/
 #define RemoteTemperature   CO_RPDO(0).WORD[0]
 ```
 
-确认写入对象字典的值，在`CO_OD_VerifyWrite`函数中添加代码：
+确认写入对象字典的值，在 `CO_OD_VerifyWrite` 函数中添加代码：
 
 ```C
 case 0x3000: //TempLo
@@ -85,7 +85,7 @@ case 0x3001: //TempHi
     break;
 ```
 
-将变量添加到对象字典。此时要留心，索引和子索引必须在整个CO_OD数组中排序。在*Manufacturer specific*部分添加代码：
+将变量添加到对象字典。此时要留心，索引和子索引必须在整个 CO_OD 数组中排序。在 *Manufacturer specific* 部分添加代码：
 
 ```C
 OD_ENTRY(0x3000， 0x00， ATTR_RW|ATTR_ROM， TempLo)，
@@ -94,13 +94,13 @@ OD_ENTRY(0x3100， 0x00， ATTR_RO， Status)，
 OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 ```
 
-关于*CO_OD.c*文件的部分在这里就结束了。在*CO_OD.h*中将声明上面的变量和PDO映射。在*User.c*中将使用变量，并触发TPDO。
+关于 *CO_OD.c* 文件的部分在这里就结束了。在 *CO_OD.h* 中将声明上面的变量和PDO映射。在 *User.c* 中将使用变量，并触发TPDO。
 
 #### 3.4.2 配置工程 - CO_OD.h文件
 
-代码以等宽字符显示，与_blank_project不同的地方已做标识。
+代码以等宽字符显示，与 \_blank_project 不同的地方已做标识。
 
-*Setup CANopen*部分代码：
+*Setup CANopen* 部分代码：
 
 ```C
 #define CO_NO_SYNC              0   //<<
@@ -124,18 +124,18 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 #define CO_SAVE_ROM
 ```
 
-在这里未使用SYNC对象，从采集单元接收RPDO0（两字节），用TPDO0（一字节）来报告状态，并监控另外两个节点。
+在这里未使用 SYNC 对象，从采集单元接收 RPDO0（两字节），用 TPDO0（一字节）来报告状态，并监控另外两个节点。
 
-*Default values for object dictionary*部分代码保持默认状态。
+*Default values for object dictionary* 部分代码保持默认状态。
 
-*Heartbeat consumer*部分代码如下：
+*Heartbeat consumer* 部分代码如下：
 
 ```C
 #define ODD_CONS_HEARTBEAT_0    0x000605DCL //<<
 #define ODD_CONS_HEARTBEAT_1    0x000805DCL //<<
 ```
 
-这里设置监控ID为6和8的节点，若Heartbeat信号丢失超过1500ms，则动力装置切换到`Pre-Operational`状态。
+这里设置监控 ID 为 6 和 8 的节点，若 Heartbeat 信号丢失超过 1500 ms，则动力装置切换到 `Pre-Operational` 状态。
 
 *0x1400 Receive PDO parameters* 部分代码：
 
@@ -144,7 +144,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 #define ODD_RPDO_PAR_T_TYPE_0   255
 ```
 
-节点会直接从采集单元（COB-ID=0x286）接收PDO。
+节点会直接从采集单元（COB-ID = 0x286）接收 PDO。
 
 *0x1600 Receive PDO mapping* 部分代码：
 ```C
@@ -158,7 +158,7 @@ OD_ENTRY(0x3200， 0x00， ATTR_RWW， RemoteTemperature)，
 #define ODD_RPDO_MAP_0_8 0x00000000L
 ```
 
-RPDO0的长度是两字节。接收的PDO必须具有同样的长度，就像在映射中定义的一样，否则将会产生错误。RPDO数据也可以通过对象字典索引0x3200，子索引0（「变量」`RemoteTemperature`位置）访问。
+RPDO0 的长度是两字节。接收的 PDO 必须具有同样的长度，就像在映射中定义的一样，否则将会产生错误。RPDO 数据也可以通过对象字典索引 0x3200，子索引 0（「变量」`RemoteTemperature` 位置）访问。
 
 *0x1800 Transmit PDO parameters* 部分代码：
 
@@ -169,11 +169,11 @@ RPDO0的长度是两字节。接收的PDO必须具有同样的长度，就像在
 #define ODD_TPDO_PAR_E_TIME_0   1000    //<<
 ```
 
-PDO COB-ID(11位CAN标识符)将保持默认——0x180+NodeID。PDO 0的抑制时间（Inhibit time）为100 *100μs，因此PDO更新将不会比间隔10ms更快。PDO 0将在状态改变时与每秒钟定时（1000ms）发送。传输类型是254-制造商特定的。
+PDO COB-ID (11 位 CAN 标识符)将保持默认——0x180 + NodeID。PDO 0 的抑制时间（Inhibit time）为 100 * 100 μs，因此 PDO 更新将不会比间隔 10 ms 更快。PDO 0 将在状态改变时与每秒钟定时（1000 ms）发送。传输类型是 254 - 制造商特定的。
 
 *0x1A00 Transmit PDO mapping* 部分代码：
 
-```C
+```c
 #define ODD_TPDO_MAP_0_1 0x31000008L    //<<
 #define ODD_TPDO_MAP_0_2 0x00000000L    //<<
 #define ODD_TPDO_MAP_0_3 0x00000000L
@@ -184,7 +184,7 @@ PDO COB-ID(11位CAN标识符)将保持默认——0x180+NodeID。PDO 0的抑制�
 #define ODD_TPDO_MAP_0_8 0x00000000L
 ```
 
-TPDO0的长度是1字节（8位）。TPDO数据也可以通过对象字典索引0x3100，子索引0（「变量」`Status`位置）访问。
+TPDO 0 的长度是 1 字节（8 位）。TPDO 数据也可以通过对象字典索引 0x3100，子索引 0（「变量」`Status` 位置）访问。
 
 *Default values for user Object Dictionary Entries* 部分代码：
 
@@ -193,11 +193,11 @@ TPDO0的长度是1字节（8位）。TPDO数据也可以通过对象字典索引
 #define ODD_CANbitRate  3
 ```
 
-动力装置的NodeID为7，CAN比特率为125kbps。
+动力装置的 NodeID 为 7，CAN 比特率为 125 kbps。
 
-#### 3.4.3 应用程序接口 - User.c文件
+#### 3.4.3 应用程序接口 - User.c 文件
 
-代码以等宽字体显示。与 ~~Example_generic_IO~~ _blank_project不同的地方已标出。
+代码以等宽字体显示。与 ~~Example_generic_IO~~ \_blank_project 不同的地方已标出。
 
 头文件中的部分定义：
 
@@ -216,7 +216,7 @@ TPDO0的长度是1字节（8位）。TPDO数据也可以通过对象字典索引
 #define ERROR_TEMP_LOW  ERROR_USER_4
 ```
 
-更改`User_Init`函数：
+更改 `User_Init` 函数：
 
 ```C
 void User_Init(void){
@@ -227,7 +227,7 @@ void User_Init(void){
 }
 ```
 
-更改`User_Process1msIsr`函数：
+更改 `User_Process1msIsr` 函数：
 
 ```C++
 void User_Process1msIsr(void){
@@ -279,24 +279,42 @@ void User_Process1msIsr(void){
 }
 ```
 
-函数每ms执行一次。也可以使用*User_ProcessMain*函数代替。<u>无论如何，所有的代码都必须解锁。</u>（XW_180322： 这里不是很明白，原文`Anyway all code must be unblocking.`）
+函数每 ms 执行一次。也可以使用 *User_ProcessMain* 函数代替。<u>无论如何，所有的代码都必须解锁。</u>（XW_180322： 这里不是很明白，原文 `Anyway all code must be unblocking.`）
 
-#### 3.4.4 电子数据表EDS - Tutorial_Power.eds文件
+#### 3.4.4 电子数据表 EDS - Tutorial_Power.eds 文件
 
-Eds文件可以与CANopen监视器一起使用，以便在对象字典中轻松而清晰地设置参数。它可以用商业程序进行编辑。因为它是一个文本文件，所以也可以手工编辑，如下所示。 您可以将 *Tutorial\_Power.eds* 与 *\_blank\_project.eds* 进行比较以查看差异。
+Eds 文件可以与 CANopen 监视器一起使用，以便在对象字典中轻松而清晰地设置参数。它可以用商业程序进行编辑。因为它是一个文本文件，所以也可以手工编辑，如下所示。 您可以将 *Tutorial\_Power.eds* 与 *\_blank\_project.eds* 进行比较以查看差异。
 
-待续……
+#### 3.4.5 编译、下载和测试
+
+编译工程并下载到 PIC MCU。现在将 MCU 断电并重新上电，以确保 PLLx4 模式启用。先不要连接到网络。上电后绿色的 *Green CAN run led* 应该以 2.5 Hz 的频率闪烁。这意味着 NMT 的运行状态是 Pre-operational。红色的 *Red CAN error led* 应该闪烁一次，这意味着，CAN 总线是被动的。加热器和冷却器 led 必须是灭状态。
+
+现在可以采集单元和动力装置的 CAN 接口连接在一起（图 4.1）。
+
+![][P4-1]
+
+在上电之后，采集单元与动力装置上的绿色 *Green CAN run led* 必须常亮且没有闪烁（Operational 状态）。Startup 状态受变量 *NMT\_Startup* 控制，位于索引 0x1F80。在采集单元与动力装置上的 CAN error led 现在应该是灭的。
+
+指示加热器和冷却器状态的 LED 不会亮，因为动力装置还监控着操作单元，现在没有完成。
+
+如果红灯亮起或闪烁一次，说明通信发生错误。这肯定是不允许的，如果确实出现了，请检查线材连接、终端电阻、晶振频率、PLL 设置、震荡频率和 CAN 波特率的宏定义。
+
+至此，动力装置部分的编程结束。下一部分是操作单元的编程。
+
+---
+2018/3/23 更新，下面的部分见 [CANopenNode学习（3)][L3]
+
+[L1]:https://li-qw.github.io/2018/03/21/CANopenNode-learn-1/  
+[L2]:https://li-qw.github.io/2018/03/22/CANopenNode-learn-2/  
+[L3]:https://li-qw.github.io/2018/03/23/CANopenNode-learn-3/  
 
 
-    2018/3/22更新，很快就要完成了。
-
-
- 
-[L0]:https://li-qw.github.io/2018/03/21/CANopenNode-learn-1/ "上一部分" 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  
 [R2]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Manual》 V1.10"  
 [R3]:mailto:janez.paternoster@siol.net "作者 Janez Paternoster"
 [R4]:http://www.winmerge.org/ "文件比较工具"
 [P1-1]:https://us1.myximage.com/2018/03/22/1184ad33502524a63969c282b9040d7f.png "简单的CANopen网络"
 [P2-1]:https://us1.myximage.com/2018/03/22/505b807b391ee5b3b38ae4a5c772b07a.png "CAN收发器与PIC MCU的连接"
+[P4-1]:https://us1.myximage.com/2018/03/23/c20cbfc03670fbc8a0361795ba7f9e09.png "三个节点的CANopen网络连接"
+
 [P3-1]:https://us1.myximage.com/2018/03/22/b34e867948786dfb5afd0e0824a6152c.png "路径设置"
