@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CANopenNode学习（2/2）
+title: CANopenNode学习（2）
 date: 2018-3-22
 categories: blog
 tags: [CANopen，CANopenNode，学习，代码]
@@ -16,7 +16,7 @@ description: 学习使用CANopenNode开源库开发CANopen网络。
 
 CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 
-接上文：[CANopenNode学习（1/2）][L0]
+接上文：[CANopenNode学习（1）][L0]
 
 ### 3.4 动力装置的编程
 
