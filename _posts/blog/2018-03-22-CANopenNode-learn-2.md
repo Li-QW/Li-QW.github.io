@@ -304,9 +304,9 @@ Eds 文件可以与 CANopen 监视器一起使用，以便在对象字典中轻�
 ---
 2018/3/23 更新，下面的部分见 [CANopenNode学习（3)][L3]
 
-[L1]:https://li-qw.github.io/2018/03/21/CANopenNode-learn-1/  
-[L2]:https://li-qw.github.io/2018/03/22/CANopenNode-learn-2/  
-[L3]:https://li-qw.github.io/2018/03/23/CANopenNode-learn-3/  
+[L1]:./2018/03/21/CANopenNode-learn-1/  
+[L2]:./2018/03/22/CANopenNode-learn-2/  
+[L3]:./2018/03/23/CANopenNode-learn-3/  
 
 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  

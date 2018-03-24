@@ -104,9 +104,9 @@ PDO 参数不在对象字典中存在。它们仍将作为变量出现，但不�
     2018/3/23 更新，很快就要完成了。
 
 
-[L1]:https://li-qw.github.io/2018/03/21/CANopenNode-learn-1/  
-[L2]:https://li-qw.github.io/2018/03/22/CANopenNode-learn-2/  
-[L3]:https://li-qw.github.io/2018/03/23/CANopenNode-learn-3/  
+[L1]:./2018/03/21/CANopenNode-learn-1/  
+[L2]:./2018/03/22/CANopenNode-learn-2/  
+[L3]:./2018/03/23/CANopenNode-learn-3/  
 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  
 [R2]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Manual》 V1.10"  
