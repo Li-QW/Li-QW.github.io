@@ -1,9 +1,9 @@
 # 我从哪里来
 
-访问地址：https://li-qw.github.io
+访问地址：https://syauo.github.io
 
-该repo Fork 自 [马壮的个人博客][3]，博客地址：<http://mazhuang.org>，欢迎 Star 和 Fork 正宗原版。  
-
+该repo Fork 自 [码志][3]，博客地址：<http://mazhuang.org>，欢迎 Star 和 Fork 正宗原版。  
+ 
 甫一点击便被作者的行文风格和写作特点深深感染，文字排版更是相当优雅，向作者表达真挚的**感谢**！
 
 # LICENSE
