@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://syauo.github.io
+url: https://syauo.tech
 date_format: "ordinal"
 title: 小我 | Syauo
 subtitle: "学贵有恒 驽马奋蹄"
@@ -118,4 +118,4 @@ simple_jekyll_search:
 #    Analytics     #
 # ---------------- #
 google:
-    analytics_id: 
+    analytics_id: UA-116307746-1 
