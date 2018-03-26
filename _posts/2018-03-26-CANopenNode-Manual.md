@@ -2,13 +2,14 @@
 layout: post
 title: CANopenNode 用户手册
 date: 2018-3-26
-categories: [blog, Embedded, Fieldbus]
+categories: [blog, Fieldbus]
 description: CANopenNode 的介绍及使用方法。
 keywords: CANopenNode, Embedded, Fieldbus, CANopen, PIC18F
 ---
 
-
-# 《CANopenNode 用户手册》
+ 
+ 
+> CANopenNode 是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
 
 > 原文件：    [CANopenNode Manual V1.1][R2]  
 > 原作者：    [Janez Paternoster][R3]
