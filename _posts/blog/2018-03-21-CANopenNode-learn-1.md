@@ -18,11 +18,11 @@ CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 
 
 ## 1. 介绍  
-通过[教程][R1]，学习使用CANopenNode开源库开发CANopen网络。 它将显示如何：制作通用输入/输出设备，使用过程数据对象（传输和映射），在对象字典中使用保持性变量，为智能设备制作自己的程序，为NMT主设备使用自定义CAN消息，使用紧急消息 针对自定义错误等。
+通过[教程][R1]，学习使用 CANopenNode 开源库开发 CANopen 网络。 它将显示如何：制作通用输入/输出设备，使用过程数据对象（传输和映射），在对象字典中使用保持性变量，为智能设备制作自己的程序，为NMT主设备使用自定义 CAN 消息，使用紧急消息 针对自定义错误等。
 
-在后面的章节中将介绍如何使用 `panel_with_PIC+LCD+keypad`或`Web_interface_with_SC1x`示例（都包含在CANopenNode中）或使用标准配置工具配置网络。
+在后面的章节中将介绍如何使用 `panel_with_PIC+LCD+keypad` 或 `Web_interface_with_SC1x` 示例（都包含在 CANopenNode 中）或使用标准配置工具配置网络。
 
-[教程][R1]介绍了CANopenNode的大部分功能。 这是相当多的，教程中有很多信息。 源代码已经过测试，所以用户不应该遇到问题。 如果有问题或疑问，请[联系教程原作者][R3]。
+[教程][R1]介绍了 CANopenNode 的大部分功能。 这是相当多的，教程中有很多信息。 源代码已经过测试，所以用户不应该遇到问题。 如果有问题或疑问，请[联系教程原作者][R3]。
 
 
 
@@ -30,17 +30,16 @@ CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 1. [CANopenNode 源码](https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/);
 2. [MPLAB IDE](http://www.microchip.com);
 3. [MPLAB C18 V3.00 +](http://www.microchip.com);
-4. 三块带有微控制器PIC18F458（或其他具有CAN的PIC18F）和CAN收发器的电路板;
-5. PIC编程器（使用[MPLAB ICD2](http://www.microchip.com)工作正常）。
-6. 熟悉使用MPLAB IDE和MPLAB C18。
-7. 有关CANopen协议的知识（在线培训[can-cia](http：//www.can-cia.org/canopen/)或[esacademy](http://www.esacademy.com/myacademy/)，[书籍](www.canopenbook.com/))。
-8. 建议：CANopen配置工具，如`panel_with_PIC+LCD+keypad`（CANopenNode的一部分）或
-   `Web_interface_with_SC1x`（也是CANopenNode的一部分）或任何其他商用CANopen配置工具。
+4. 三块带有微控制器 PIC18F458（或其他具有 CAN 的 PIC18F）和 CAN 收发器的电路板;
+5. PIC 编程器（使用 [MPLAB ICD2](http://www.microchip.com) 工作正常）。
+6. 熟悉使用 MPLAB IDE 和 MPLAB C18。
+7. 有关 CANopen 协议的知识（在线培训 [can-cia](http：//www.can-cia.org/canopen/) 或 [esacademy](http://www.esacademy.com/myacademy/)，[书籍](www.canopenbook.com/))。
+8. 建议：CANopen 配置工具，如 `panel_with_PIC+LCD+keypad`（CANopenNode 的一部分）或 `Web_interface_with_SC1x` （也是 CANopenNode 的一部分）或任何其他商用 CANopen 配置工具。
 
 ### 1.2 说明
-网络例程是带有远程传感器和命令接口的空调机组。它由三个CANopen设备组成：
+网络例程是带有远程传感器和命令接口的空调机组。它由三个 CANopen 设备组成：
 
-图1.1 - 简单的CANopen网络  
+图1.1 - 简单的 CANopen 网络  
 ![][P1-1]
 
 1. 采集单元——独立温度传感器：  
@@ -49,60 +48,60 @@ CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
     - 每秒产生一次心跳。
 2. 动力装置——由加热器和冷却器制成的空调单元：
     - 从传感器接收温度（RPDO 0）。
-    - TempLo和TempHi变量位于“对象字典”中。 可以通过SDO通信对象使用CANopen配置工具访问和更改它们。变量具有保持性（关机后不丢失）。 单位是[℃ 摄氏度]。
-    - 打开或关闭冷却器或加热器。决定基于来自传感器，TempLo和TempHi的温度。 如果设备未处于运行状态，则冷却器和加热器将关闭。
+    - TempLo 和TempHi 变量位于「对象字典」中。 可以通过 SDO 通信对象使用 CANopen 配置工具访问和更改它们。变量具有保持性（关机后不丢失）。 单位是[℃ 摄氏度]。
+    - 打开或关闭冷却器或加热器。决定基于来自传感器，TempLo 和 TempHi 的温度。 如果设备未处于运行状态，则冷却器和加热器将关闭。
     - 在每次状态改变时传送冷却器和加热器的状态，并周期性地使用事件定时器（TPDO 0）。
     - 每秒产生一次心跳。
     - 监测来自传感器和命令接口的心跳。
-3. 操作单元——一个按钮和两个LED二极管，可选LCD显示器：
-    - 接收来自传感器（RPDO 0）的温度并将其显示在LCD上（可选）。
-    - 从电源单元（RPDO 1）接收冷却器和加热器的状态，并将其显示在LED二极管上。
-    - 与按钮连接的NMT主设备。如果按下按钮，则所有网络将被设置为预操作`pre-operational`状态，并且如果再次按下按钮，则所有网络将被设置为可操作的NMT状态。如果更长时间（5秒）按下按钮，则网络上的所有节点都将重置。
+3. 操作单元——一个按钮和两个 LED，可选 LCD 显示器：
+    - 接收来自传感器（RPDO 0）的温度并将其显示在 LCD 上（可选）。
+    - 从电源单元（RPDO 1）接收冷却器和加热器的状态，并将其显示在 LED 上。
+    - 与按钮连接的 NMT 主设备。如果按下按钮，则所有网络将被设置为预操作`pre-operational`状态，并且如果再次按下按钮，则所有网络将被设置为可操作的 NMT 状态。如果更长时间（5 秒）按下按钮，则网络上的所有节点都将重置。
     - 每秒产生一次心跳。
 
-除上述通信对象外，每个节点还使用SDO，紧急和NMT（从）通信对象。
+除上述通信对象外，每个节点还使用 SDO，紧急和 NMT（从）通信对象。
 
 ## 2. 硬件介绍
 
-例程系统的硬件由Microchip PIC18F458微控制器，CAN收发器和一些状态LED二极管或按钮组成。可以使用CAN收发器Microchip MCP 2551或Philips PCA82C250（图2.1）。采用PLLx4模式的8MHz振荡器将用于在PIC上获得32MHz。 如果使用其他振荡器频率或其他用于CAN二极管的引脚，则必须编辑*CO_driver.h*文件。
+例程系统的硬件由 Microchip PIC18F458 微控制器，CAN 收发器和一些状态 LED 二极管或按钮组成。可以使用 CAN 收发器 Microchip MCP 2551 或 Philips PCA82C250（图 2.1）。采用 PLLx4 模式的 8 MHz 振荡器将用于在 PIC 上获得 32 MHz。 如果使用其他振荡器频率或其他用于 CAN 二极管的引脚，则必须编辑 *CO_driver.h* 文件。
 
-图2.1 CAN收发器与PIC MCU的连接  
+图 2.1 CAN 收发器与 PIC MCU 的连接  
 ![][P2-1]
 
 <u>详细说明：</u>  
-1. 采集单元-节点号6
-    - RB4和GND之间的LED-绿色（CAN Run led），
-    - RB5和GND之间的LED-红色（CAN Error led），
-    - +5V，GND和RA0之间接5kΩ电位器（模拟温度传感器）。
-2. 动力装置-节点号7：
-    - RB4和GND之间的LED-绿色（CAN Run led），
-    - RB5和GND之间的LED-红色（CAN Error led），
-    - RC4和GND之间的LED-黄色（冷却器开启）;
-    - RC5和GND之间的LED-黄色（加热器开启）。
+1. 采集单元 - 节点号 6
+    - RB4 和 GND 之间接 LED - 绿色（CAN Run led），
+    - RB5 和 GND 之间接 LED - 红色（CAN Error led），
+    - +5V，GND 和 RA0 之间接 5 kΩ 电位器（模拟温度传感器）。
+2. 动力装置 - 节点号 7：
+    - RB4 和 GND 之间接 LED - 绿色（CAN Run led），
+    - RB5 和 GND 之间接 LED - 红色（CAN Error led），
+    - RC4 和 GND 之间接 LED - 黄色（冷却器开启）;
+    - RC5 和 GND 之间接 LED - 黄色（加热器开启）。
 3. 操作单元-节点号8：
-    - RB4和GND之间的LED-绿色（CAN Run led）;
-    - RB5和GND之间的LED-红色（CAN Error led）;
-    - RC4和GND之间的LED-黄色（冷却器状态）;
-    - RC5和GND之间的LED-黄色（加热器状态）;
-    - RC6和VCC之间接按钮带下拉电阻（NMT主控）;
-    - LCD显示温度（这里没有实现，预留了可用的变量）。
+    - RB4 和 GND 之间接 LED - 绿色（CAN Run led）;
+    - RB5 和 GND 之间接 LED - 红色（CAN Error led）;
+    - RC4 和 GND 之间接 LED - 黄色（冷却器状态）;
+    - RC5 和 GND 之间接 LED - 黄色（加热器状态）;
+    - RC6 和 VCC 之间接按钮带下拉电阻（NMT 主控）;
+    - LCD 显示温度（这里没有实现，预留了可用的变量）。
 
-## 3. MCU编程
+## 3. MCU 编程
 
-阅读该章节需要了解MPLAB IDE和MPLAB C18编译器的相关知识。这两个程序都必须正确安装和配置。
+阅读该章节需要了解 MPLAB IDE 和 MPLAB C18 编译器的相关知识。这两个程序都必须正确安装和配置。
 
 ### 3.1 源代码
 
-首先从1.1中的链接下载*CANopenNode-V1.10.zip*。解压文件到C：盘。
+首先从 1.1 中的链接下载 *CANopenNode-V1.10.zip*。解压文件到 C 盘。
 
-压缩包内已经为Microchip MPLAB C18编写了三个工程：*Tutorial_Sensor*，*Tutorial_Power*和*Tutorial_Command*。所有三个工程都使用相同的库文件。每个工程都可以用MPLAB IDE打开。每个工程的编译都必须不能包含错误或警告。
+压缩包内已经为 Microchip MPLAB C18 编写了三个工程： *Tutorial_Sensor*，*Tutorial_Power* 和 *Tutorial_Command*。所有三个工程都使用相同的库文件。每个工程都可以用 MPLAB IDE 打开。每个工程的编译都必须不能包含错误或警告。
 
-*Project>Build options>project>general*中的文件夹设置如图3.1所示。
+*Project>Build options>project>general* 中的文件夹设置如图 3.1 所示。
 
-图3.1 路径设置
+图 3.1 路径设置
 ![][P3-1]
 
-完整Include路径是：
+完整 Include 路径是：
 
     C：\MCC18\h; 
     C：\CANopenNode\_src\CANopen; 
@@ -118,27 +117,27 @@ lesser.txt |许可文件
 CANopen\CANopen.h |main 头文件  
 CANopen\CO_errors.h |错误定义   
 CANopen\CO_stack.c |main 代码  
-CANopen\CO_OD.txt |OD-对象字典说明  
+CANopen\CO_OD.txt |对象字典说明  
 CANopen\PIC18_with_Microchip_C18\CO_driver.h |驱动头文件  
 CANopen\PIC18_with_Microchip_C18\CO_driver.c |处理器特定代码  
 CANopen\PIC18_with_Microchip_C18\main.c |main()与中断函数  
-CANopen\PIC18_with_Microchip_C18\memcpyram2flash.h |写flash  
-CANopen\PIC18_with_Microchip_C18\memcpyram2flash.c |写flash  
-CANopen\PIC18_with_Microchip_C18\CONFIG18f458.c |芯片配置位-可选  
+CANopen\PIC18_with_Microchip_C18\memcpyram2flash.h |写 flash  
+CANopen\PIC18_with_Microchip_C18\memcpyram2flash.c |写 flash  
+CANopen\PIC18_with_Microchip_C18\CONFIG18f458.c |芯片配置位 - 可选  
 CANopen\PIC18_with_Microchip_C18\18f458i.lkr |默认链接脚本  
 Tutorial_xxx\CO_OD.h |对象字典头文件  
 Tutorial_xxx\CO_OD.c |对象字典  
 Tutorial_xxx\user.c |用户代码  
-Tutorial_xxx\Tutorial_xxx.eds |EDS文件  
+Tutorial_xxx\Tutorial_xxx.eds |EDS 文件  
 
 
-### 3.2 振荡器和CAN LED设置
+### 3.2 振荡器和 CAN LED 设置
 
-默认情况下，所有MCU都运行在32MHz。这是通过PIC18Fxxx微控制器中的8MHz外部晶振和PLLx4模式实现的。如果使用*CONFIG18f458.c*文件，则利用`#pragma config OSC = HSPLL`设置PLLx4模式，另外也可以在MPLAB IDE中转到*Configure>Configuration bits*并设置OSC：`HS Oscillator, PLL Enable`。如果更改了PLLx4模式设置，则微控制器必须重新上电，更改方可生效。
+默认情况下，所有 MCU 都运行在 32 MHz。这是通过 PIC18Fxxx 微控制器中的 8MHz 外部晶振和 PLLx4 模式实现的。如果使用 *CONFIG18f458.c* 文件，则利用 `#pragma config OSC = HSPLL` 设置 PLLx4 模式，另外也可以在 MPLAB IDE 中转到 *Configure>Configuration bits* 并设置 OSC ： `HS Oscillator, PLL Enable`。如果更改了 PLLx4 模式设置，则微控制器必须重新上电，更改方可生效。
 
-若采用其它频率的振荡器则打开*CO_driver.h*并更改宏`CO_OSCILATOR_FREQ`。另一种方法是在每个工程文件中添加一个宏定义： *Project>Build options>project>MPLAB C18>Macro Definitions>Add...* 并写入`CO_OSCILATOR_FREQ xx`，其中`xx`是振荡器频率，对于每个工程可以不同。
+若采用其它频率的振荡器则打开 *CO_driver.h* 并更改宏 `CO_OSCILATOR_FREQ`。另一种方法是在每个工程文件中添加一个宏定义： *Project>Build options>project>MPLAB C18>Macro Definitions>Add...* 并写入 `CO_OSCILATOR_FREQ xx`，其中 `xx` 是振荡器频率，对于每个工程可以不同。
 
-默认情况下，绿色LED（CAN Run led）位于RB4上，红色LED（CAN Error Error led）位于RB5上。引脚在*CO_driver.h*文件中定义，与振荡器的配置在同一部分。引脚也可以在那里改变。如果需要禁用LED，请禁用宏。例如可以将其注释掉：  
+默认情况下，绿色 LED （CAN Run led）位于 RB4 上，红色 LED （CAN Error Error led）位于 RB5 上。引脚在 *CO_driver.h* 文件中定义，与振荡器的配置在同一部分。引脚也可以在那里改变。如果需要禁用 LED，请禁用宏。例如可以将其注释掉：  
 
 ```c
 #define PCB_RUN_LED_INIT()  //{TRISBbits.TRISB4 = 0; PORTBbits.RB4 = 0;}
@@ -147,24 +146,24 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 ### 3.3 采集单元编程
 
-**采集单元（Sensor）基于Example_generic_IO。**所有的差异都会标出来。Example_generic_IO基于_blank_project和CiADS401——通用输入/输出模块的CANopen设备配置文件。采集单元将使用ADC转换器和PDO对象通过CAN发送模拟量值。
+**采集单元（Sensor）基于 Example\_generic\_IO 。** 所有的差异都会标出来。Example_generic_IO 基于 _blank_project 和 CiADS401 ——通用输入/输出模块的 CANopen 设备配置文件。采集单元将使用 ADC 转换器和 PDO 对象通过 CAN 发送模拟量值。
 
-以下是CiADS401的简短摘录：
+以下是 CiADS401 的简短摘录：
 
-> OD，0x6000：读DI - 映射到TPDO 0的64位。  
-> OD，0x6200：写DO - 映射到RPDO 0的64位。  
-> OD，0x6401：读AI - 将12x16位值映射到TPDO 1...3。  
-> OD，0x6411：写AO - 将12x16位值映射到RPDO 1...3。  
+> OD，0x6000： 读 DI - 映射到 TPDO 0 的 64 位。  
+> OD，0x6200： 写 DO - 映射到 RPDO 0 的 64 位。  
+> OD，0x6401： 读 AI - 将 12x16 位值映射到 TPDO 1...3。  
+> OD，0x6411： 写 AO - 将 12x16 位值映射到 RPDO 1...3。  
 
-这里将只使用TPDO 1的两个字节，从索引0x6401子索引0x01映射。
+这里将只使用 TPDO 1 的两个字节，从索引 0x6401 子索引 0x01 映射。
 
-打开*Tutorial\_Sensor*工程。
+打开 *Tutorial\_Sensor* 工程。
 
-#### 3.3.1 配置工程 - CO_OD.h文件
+#### 3.3.1 配置工程 - CO_OD.h 文件
 
-代码以等宽字体显示。与Example_generic_IO的差异已标出。为了更好地理解源代码可以阅读源文件中每行的注释。
+代码以等宽字体显示。与 Example_generic_IO 的差异已标出。为了更好地理解源代码可以阅读源文件中每行的注释。
 
-*Setup CANopen*部分代码：
+*Setup CANopen* 部分代码：
 
 ```c
 #define CO_NO_SYNC              0  //<<
@@ -188,20 +187,20 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 #define CO_SAVE_ROM
 ```
 
-在本节中可以定义CANopenNode中使用的特定对象的数量。相同的功能可能被禁用。
+在本节中可以定义 CANopenNode 中使用的特定对象的数量。相同的功能可能被禁用。
 
-在我们的案例中，不使用SYNC对象，不接收PDO，不使用TPDO 0（数字输入），TPDO 1（两字节）用于传输温度传感器的模拟值，不监控其他节点。
+在我们的案例中，不使用 SYNC 对象，不接收 PDO，不使用 TPDO 0（数字输入），TPDO 1（两字节）用于传输温度传感器的模拟值，不监控其他节点。
 
-*Device profile for Generic I/O*部分配置代码：
+*Device profile for Generic I/O* 部分配置代码：
 
 ```c
-//#define CO_IO_DIGITAL_INPUTS      //4 * 8 digital inputs  
-//#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 digital outputs  
-#define CO_IO_ANALOG_INPUTS         //8 * 16bit analog inputs  
-//#define CO_IO_ANALOG_OUTPUTS      //2 * 16bit analog outputs  
+//#define CO_IO_DIGITAL_INPUTS      //4 * 8 位数字量输入  
+//#define CO_IO_DIGITAL_OUTPUTS     //4 * 8 位数字量输出  
+#define CO_IO_ANALOG_INPUTS         //8 * 16 位模拟量输入  
+//#define CO_IO_ANALOG_OUTPUTS      //2 * 16 位模拟量输出
  ```
 
-*Default values for object dictionary*部分配置代码： 
+*Default values for object dictionary* 部分配置代码： 
 
 ````c
 #define ODD_PROD_HEARTBEAT  1000  
@@ -212,11 +211,11 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 
 心跳对象将每秒发送一次。
 
-如果错误寄存器中的通讯错误位（索引1001）被置位并且设备将处于Operational NMT状态，则设备将维持Operational状态。 默认行为是通信错误强制设备处于Pre-Operational NMT状态。
+如果错误寄存器中的通讯错误位（索引 1001）被置位并且设备将处于 Operational NMT 状态，则设备将维持 Operational 状态。 默认行为是通信错误强制设备处于 Pre-Operational NMT状态。
 
-在启动设备时进入NMT操作状态。
+在启动设备时进入 NMT 操作状态。
 
-*0x1800 Transmit PDO parameters*部分配置代码：
+*0x1800 Transmit PDO parameters* 部分配置代码：
 
 ```c
 #define ODD_TPDO_PAR_COB_ID_0   0
@@ -229,9 +228,9 @@ Tutorial_xxx\Tutorial_xxx.eds |EDS文件
 #define ODD_TPDO_PAR_E_TIME_1   60000   //<<
 ```
 
-PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（11位CAN标识符）将为默认值 —— 0x280 + Node ID。PDO 1的抑制时间（Inhibit time）为1000*100μs，因此PDO 1更新将不会比间隔100ms更快。PDO 1将在状态更改和每分钟（60000毫秒）时发送 - 传输类型为255 - 设备配置文件特定。
+PDO 0 不会被发送（因为 CO_IO_DIGITAL_INPUTS 被禁用）。PDO 1 COB-ID（11 位 CAN 标识符）将为默认值 —— 0x280 + Node ID。PDO 1的抑制时间（Inhibit time）为1000*100 μs，因此 PDO 1 更新将不会比间隔 100 ms 更快。PDO 1 将在状态更改和每分钟（60000 ms）时发送 - 传输类型为 255 - 设备配置文件特定。
 
-*0x1A00 Transmit PDO mapping for PDO 1*部分代码:
+*0x1A00 Transmit PDO mapping for PDO 1* 部分代码:
 
 ```c
 #define ODD_TPDO_MAP_1_1    0x64010110L
@@ -244,8 +243,8 @@ PDO 0不会被发送（因为CO_IO_DIGITAL_INPUTS被禁用）。PDO 1 COB-ID（1
 #define ODD_TPDO_MAP_1_8    0x00000000L
 ```
 
-只在TPDO 1中发送一个模拟量，所以在CAN总线上只有两个字节的数据。PDO长度是根据CANopenNode中的映射自动计算的。在每次状态改变时，从变量`ODE_Read_Analog_Input [0]`（位于OD中，索引=0x6401，子索引=1，长度=0x10字节）复制数据。要了解它是如何工作的，看一下来自文件
-*user.c*的示例代码，*Write TPDOs*部分：
+只在 TPDO 1 中发送一个模拟量，所以在 CAN 总线上只有两个字节的数据。PDO 长度是根据 CANopenNode 中的映射自动计算的。在每次状态改变时，从变量 `ODE_Read_Analog_Input [0]`（位于 OD 中，索引 = 0x6401，子索引 = 1，长度 = 0x10 字节）复制数据。要了解它是如何工作的，看一下来自文件
+*user.c* 的示例代码，*Write TPDOs* 部分：
 
 ```c
 if(CO_TPDO_InhibitTimer[1] == 0 && (
@@ -257,18 +256,18 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 }
 ```
 
-*Default values for user Object Dictionary Entries*部分:
+*Default values for user Object Dictionary Entries* 部分:
 
 ```c
     #define ODD_CANnodeID   0x06
     #define ODD_CANbitRate  3
 ```
 
-采集单元的节点ID是6，CAN比特率是125kbps。
+采集单元的节点 ID 是 6，CAN 比特率是 125 kbps。
 
-#### 3.3.2 应用程序接口 - User.c文件
+#### 3.3.2 应用程序接口 - User.c 文件
 
-代码以等宽字体显示。与Example_generic_IO的差异已标出。
+代码以等宽字体显示。与 Example_generic_IO 的差异已标出。
 
 头文件：
 
@@ -276,7 +275,7 @@ if(CO_TPDO_InhibitTimer[1] == 0 && (
 #include <adc.h>    //<<
 ```
 
-*User_Init*函数的更改：
+*User_Init* 函数的更改：
 
 ```c
 void User_Init(void){
@@ -298,7 +297,7 @@ void User_Init(void){
 }
 ```
 
-*User_Process1msIsr function, section Read from Hardware*更改：
+*User_Process1msIsr function, section Read from Hardware* 更改：
 
 ```c
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx 
@@ -317,15 +316,15 @@ if(BusyADC() == 0){
 }
 ```
 
-函数每ms执行一次。
+函数每 ms 执行一次。
 
-Eds文件是一个文本文件，可以用于CANopen监视器。它现在有一些开销，因为我们没有使用数字输入和输出。
+Eds 文件是一个文本文件，可以用于 CANopen 监视器。它现在有一些开销，因为我们没有使用数字输入和输出。
 
-到这里采集单元部分已经结束了。你可以读取*user.c*文件，因为它是用户代码和CANopenNode协议栈之间的连接点。下一回，我们将从`blank`文件开始。您还可以检查Example_generic_IO和_blank_project文件夹中文件之间的差异。[winmerge][R4]是一个非常合适的工具。
+到这里采集单元部分已经结束了。你可以读取 *user.c* 文件，因为它是用户代码和 CANopenNode 协议栈之间的连接点。下一回，我们将从 `blank` 文件开始。您还可以检查 Example_generic_IO 和 _blank_project 文件夹中文件之间的差异。[winmerge][R4] 是一个非常合适的工具。
 
 #### 3.3.3 编译，下载和测试
 
-编译工程并下载到PIC MCU。现在将MCU断电并重新上电，以确保PLLx4模式启用。先不要连接到网络。上电后绿色的*Green CAN run led*应该点亮。这意味着NMT的运行状态是Operational。红色的*Red CAN error led*应该闪烁一次，这意味着，CAN总线是被动的。如果您在CAN_LO和CAN_HI信号上短路，则红色*Red CAN error led*灯将点亮，这表明CAN总线关闭。由于通讯错误，传感器并不会离开Operational状态。在我们的方案中，这是正常的。
+编译工程并下载到 PIC MCU。现在将 MCU 断电并重新上电，以确保 PLLx4 模式启用。先不要连接到网络。上电后绿色的 *Green CAN run led* 应该点亮。这意味着 NMT 的运行状态是Operational。红色的 *Red CAN error led* 应该闪烁一次，这意味着，CAN 总线是被动的。如果您在 CAN_LO 和 CAN_HI 信号上短路，则红色 *Red CAN error led* 灯将点亮，这表明 CAN 总线关闭。由于通讯错误，传感器并不会离开 Operational 状态。在我们的方案中，这是正常的。
 
 ---
 2018/3/22更新，下面的部分见[CANopenNode学习（2)][L2]

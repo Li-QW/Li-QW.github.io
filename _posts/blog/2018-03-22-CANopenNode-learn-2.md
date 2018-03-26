@@ -279,7 +279,7 @@ void User_Process1msIsr(void){
 }
 ```
 
-函数每 ms 执行一次。也可以使用 *User_ProcessMain* 函数代替。<u>无论如何，所有的代码都必须解锁。</u>（XW_180322： 这里不是很明白，原文 `Anyway all code must be unblocking.`）
+函数每 ms 执行一次。也可以使用 *User_ProcessMain* 函数代替。无论如何，所有的代码都必须~~解锁~~<u>是非阻塞的</u>。（XW_180326U： 原文 `Anyway all code must be unblocking.`）
 
 #### 3.4.4 电子数据表 EDS - Tutorial_Power.eds 文件
 
