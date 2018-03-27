@@ -6,11 +6,9 @@ categories: [blog, Fieldbus]
 description: CANopenNode 的介绍及使用方法。
 keywords: CANopenNode, Embedded, Fieldbus, CANopen, PIC18F
 ---
-
  
- 
-> CANopenNode 是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
-
+> CANopenNode (以前 ;) )是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
+>
 > 原文件：    [CANopenNode Manual V1.1][R2]  
 > 原作者：    [Janez Paternoster][R3]
 
@@ -20,16 +18,17 @@ keywords: CANopenNode, Embedded, Fieldbus, CANopen, PIC18F
 * TOC
 {:toc}  
 
-
 ## 1. 介绍
 
-CANopenNode 是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
+**CANopenNode** 是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
 
 ### 1.1 CAN 与 CANopen 简述
 
 CAN（Controller Area Network)最早是一款应用于汽车的串行总线系统。在工业自动化领域也有广泛应用。由于它具有成本效益（可以在多种8位控制器上实现），因此可大范围应用。
 
-<u>CAN的一些特性：</u>
+*[CAN]: Controller Area Network
+
+<u>CAN 的一些特性：</u>
 
 - 成本效益
 - 硬件实现
@@ -66,7 +65,7 @@ CAN（Controller Area Network)最早是一款应用于汽车的串行总线系�
 
     例如，PDO 只能在 Operational 状态下工作。
 
-- **错误控制-心跳协议(Error control - Heartbeat protocol)**：它用于错误控制并标识节点及其状态的存在。心跳消息是节点到一个或多个其他节点的周期性消息。其他节点可以监视特定节点是否仍然正常工作。（除了心跳协议之外，还有一个陈旧过时的错误控制服务，称为节点和生命保护协议 - Node and Life Gurading protocol。）
+- **错误控制-心跳协议（Error control - Heartbeat protocol）**：它用于错误控制并标识节点及其状态的存在。心跳消息是节点到一个或多个其他节点的周期性消息。其他节点可以监视特定节点是否仍然正常工作。（除了心跳协议之外，还有一个陈旧过时的错误控制服务，称为节点和生命保护协议 - Node and Life Gurading protocol。）
 
 - **Emergency message**:在节点发生错误或警告的情况下发送紧急消息。
 
@@ -85,7 +84,7 @@ CAN（Controller Area Network)最早是一款应用于汽车的串行总线系�
 
 - **Service Data Objects（SDO）**：实现 SDO 服务端和 SDO 客户端，加速和分段传输。变量可长达 256 字节;
 
-- **对象字典（OD）**：分两个方面：
+- **对象字典（OD）**分两个方面：
 
     1. <u>CANopen 方面</u>：通过 SDO（只读，读/写等）通过索引，子索引和长度来访问变量。在写入内存之前，可以验证它们的正确性。 
 
@@ -196,13 +195,13 @@ CANopenNode 程序执行分为三（四）个任务：
 图2.1 主线和定时器程序流程图
 ![][P2-1]
 
-### 2.3 重置节点与重置通信程序
+### 2.3 复位节点与复位通信程序
 
-在 CANopen 中定义了两种不同的复位：『复位节点』（`Reset Node`）和『复位通信』(`Reset Communication`)。使用来自 NMT 主节点的 NMT 命令可以触发两者。第一次复位是完成处理器复位并在处理器启动后执行，第二次是部分复位并用于通信复位。在 *CO\_ResetComm()* 中设置了所有 CANopenNode 特定的变量。因此，例如，如果 PDO 通信参数已更改，则必须执行「复位通信」以使更改生效。
+在 CANopen 中定义了两种不同的复位：『复位节点』（`Reset Node`）和『复位通信』(`Reset Communication`)。使用来自 NMT 主节点的 NMT 命令可以触发两者。第一次复位是完成处理器复位并在处理器启动后执行，第二次是部分复位并用于通信复位。在 `CO_ResetComm()` 中设置了所有 CANopenNode 特定的变量。因此，例如，如果 PDO 通信参数已更改，则必须执行「复位通信」以使更改生效。
 
 蓝色背景的地方是可以写入用户代码的函数。
 
-图2.2 重置节点与重置通信程序
+图2.2 复位节点与复位通信程序
 ![][P2-2]
 
 
@@ -230,10 +229,10 @@ typedef struct{
 - `NoOfBytes` 是消息中的数据长度（CAN 使用 0 到 8 个字节）。对于接收，有一个特殊的规则：如果值大于 8，则不检查消息长度，因此接受任何长度的消息。
 - `NewMsg` 是一个标志：对于接收，这个位在接收到新消息时置位；对于发送，该位『通知』TX中断程序，该消息已准备好发送。
 - `Inhibit`  标志有不同的含义。对于接收，`if（Inhibit == 1 AND NewMsg == 1）`，
-    从总线收到的新消息的数据不会被复制。例如，如果旧消息还没有被读取，则新消息丢失。对于发送，标志用于同步 TPDO 消息。如果 Inhibit == 1 且时间在 SYNC 窗口外（OD，索引 1007h），则消息被销毁并且不通过 CAN 发送。
-- `Data` 8 个字节的CAN数据。
+    从总线收到的新消息的数据不会被复制。例如，如果旧消息还没有被读取，则新消息丢失。对于发送，标志用于同步 TPDO 消息。如果 `Inhibit == 1` 且时间在 SYNC 窗口外（OD，索引 1007h），则消息被销毁并且不通过 CAN 发送。
+- `Data` 8 个字节的 CAN 数据。
 
-在通信重置时，首先整个数组清零，然后除了 Data 之外的所有值都被初始化（在`CO_ResetComm()`函数内部）。这样可以实现最少的数据复制，并且不需要其他缓冲区。
+在通信复位时，首先整个数组清零，然后除了 Data 之外的所有值都被初始化（在`CO_ResetComm()`函数内部）。这样可以实现最少的数据复制，并且不需要其他缓冲区。
 
 #### 2.4.2 接收 CAN 消息
 
@@ -243,14 +242,14 @@ CANopen 使用许多不同的 CAN 标识符，因此不能总是使用消息的�
 
 接收到的消息在不同的功能中处理。细节将在下面的章节中介绍。
 
-图2.3 接收 CAN 消息  
+图 2.3 接收 CAN 消息  
 ![][P2-3]
 
 #### 2.4.3 发送 CAN 消息
 
 要发送 CAN 消息的函数首先准备足够的 `CO_TXCAN[]` 数组元素：写入 `Data`，并且必要时还可以修改其他参数。然后它调用 `CO_TXCANsend()` 函数。如果 CAN TX 缓冲区空闲，消息将立即发送，否则将被标记，中断程序将发送它。索引值 index 较低的消息（`CO_TXCAN [index]`）将首先发送。
 
-图2.4 发送 CAN 消息  
+图 2.4 发送 CAN 消息  
 ![][P2-4]
 
 ### 2.5 主线程序
@@ -262,7 +261,7 @@ CANopen 使用许多不同的 CAN 标识符，因此不能总是使用消息的�
 
 在同一个循环中，用户函数 `User_ProcessMain()` 也正在处理中。也可能会耗费时间并且是非时间关键的代码。无论如何，不可使用阻塞函数（blocking functions）。
 
-图2.5 CANopenNode 主线处理流程图  
+图 2.5 CANopenNode 主线处理流程图  
 ![][P2-5]
 
 
@@ -271,25 +270,25 @@ CANopen 使用许多不同的 CAN 标识符，因此不能总是使用消息的�
 
 CANopen 中的预定义连接集将通信对象与其标识符连接起来。它适用于带有 11 位标识符的标准 CAN 帧。特别是对于 PDO，使用预定义值不是强制规定。
 
-表2.1 预定义连接集
+表 2.1 预定义连接集
 
-Object           |   COB-ID  
-----------------------|------------ 
-NMT SERVICE       |  000h
-SYNC              |  080h
-EMERGENCY         |  080h + NODE ID
-TIME STAMP        |  100h
-TPDO1             |  180h + NODE ID
-RPDO1             |  200h + NODE ID
-TPDO2             |  280h + NODE ID
-RPDO2             |  300h + NODE ID
-TPDO3             |  380h + NODE ID
-RPDO3             |  400h + NODE ID
-TPDO4             |  480h + NODE ID
-RPDO4             |  500h + NODE ID
-TSDO              |  580h + NODE ID
-RSDO              |  600h + NODE ID
-HEARTBEAT         |  700h + NODE ID
+| Object      | COB-ID         |
+| ----------- | -------------- |
+| NMT SERVICE | 000h           |
+| SYNC        | 080h           |
+| EMERGENCY   | 080h + NODE ID |
+| TIME STAMP  | 100h           |
+| TPDO1       | 180h + NODE ID |
+| RPDO1       | 200h + NODE ID |
+| TPDO2       | 280h + NODE ID |
+| RPDO2       | 300h + NODE ID |
+| TPDO3       | 380h + NODE ID |
+| RPDO3       | 400h + NODE ID |
+| TPDO4       | 480h + NODE ID |
+| RPDO4       | 500h + NODE ID |
+| TSDO        | 580h + NODE ID |
+| RSDO        | 600h + NODE ID |
+| HEARTBEAT   | 700h + NODE ID |
 
         
 #### 2.6.1 NMT 和网络管理
@@ -320,7 +319,7 @@ SYNC 消息集成到 CANopenNode 中。它在 Timer 程序内处理。基本时�
 以下函数接受两个参数：
 
 ```c
-void ErrorReport（unsigned char ErrorBit，unsigned int Code）;
+void ErrorReport(unsigned char ErrorBit，unsigned int Code);
 ```
     
 `ErrorBit` 对于每种不同的错误情况都是唯一的，`Code` 是客户特定的错误附加信息。如前所述，该函数只设置了一些变量，除此之外，它在 `CO_ErrorStatusBits` 数组中设置适当的位。如果之前已经设置了该位，则不会发生任何事情。这种方式只会在第一次报告具体的错误，稍后的重复会被忽略。
@@ -420,13 +419,13 @@ SDO 通信可以访问许多变量，但速度不是很快。这是相当耗时�
 
 rx（tx）消息的用法：  
 1. 将 `CO_NO_USR_CAN_RX（CO_NO_USR_CAN_TX）` 定义设置为大于 0。
-2. 初始化 `CO_RXCAN[CO_RXCAN_USER + i]`（`CO_TXCAN[CO_TXCAN_USER+i]`）数组。`0<i<CO_NO_USR_CAN_RX`（`0<i<CO_NO_USR_CAN_TX`）。不要设置 `NewMsg` 标志！
+2. 初始化 `CO_RXCAN[CO_RXCAN_USER + i]`（`CO_TXCAN[CO_TXCAN_USER+i]`）数组。0 < i < `CO_NO_USR_CAN_RX`（0 < i < `CO_NO_USR_CAN_TX`）。不要设置 `NewMsg` 标志！
 3. 当数组的 `NewMsg` 位为 1 时，从 `CO_RXCAN[CO_RXCAN_USER+i]` 读取接收到的数据。（将数据写入 `CO_TXCAN [CO_TXCAN_USER + i]` 并调用 `CO_TXCANsend`（`CO_TXCAN_USER + i`）发送消息）。
 
 NMT 主消息示例（不要忘记第 1 点）：
 
 ```c
-CO_TXCAN[CO_TXCAN_USER].Ident.WORD[0] = CO_IDENT_WRITE(0/*COB-ID*/, 0//*RTR*);
+CO_TXCAN[CO_TXCAN_USER].Ident.WORD[0] = CO_IDENT_WRITE(0/*COB-ID*/, 0/*RTR*/);
 CO_TXCAN[CO_TXCAN_USER].NoOfBytes = 2;
 CO_TXCAN[CO_TXCAN_USER].Inhibit = 0;
 CO_TXCAN[CO_TXCAN_USER].Data.BYTE[0] = NMT_RESET_COMMUNICATION;
@@ -447,9 +446,9 @@ CO_TXCANsend(CO_TXCAN_USER);
 #### 2.7.1 变量的存储类型
 
 在 CANopenNode 中，在对象字典中使用了三种类型的变量：
-- 程序存储器 flash 空间中分配的变量（ROM 变量）;
-- RAM 空间中分配的变量;
-- 在 RAM 空间中分配并且从 EEPROM 中保存／加载的变量。
+- ROM 变量，程序存储器 flash 空间中分配的变量;
+- RAM 变量，RAM 空间中分配的变量;
+- 在 RAM 空间中分配并从 EEPROM 中保存／加载的变量。
     
 1. ROM 变量的特点：
 
@@ -503,8 +502,8 @@ CO_TXCANsend(CO_TXCAN_USER);
 主要的硬件特定文件是：
 
 - main.c - 中断，timer1ms 和主函数的初始化和定义;
-- CO_driver.h - 处理器/编译器特定的宏;
-- CO_driver.c - 处理器/编译器特定功能。
+- CO_driver.h - 处理器／编译器特定的宏;
+- CO_driver.c - 处理器／编译器特定功能。
 
 这些文件包含：
 
@@ -521,7 +520,7 @@ CO_TXCANsend(CO_TXCAN_USER);
 
 ### 3.1 PIC18 和 Microchip C18
 
-PIC18Fxxx 是 [Microchip] 提供的 8 位微控制器系列。CANopenNode 专为具有集成 CAN模块的用户设计。它使用 PIC18F458 进行了测试。使用的编译器是 Microchip MPLAB C18 >= V3.00。
+PIC18Fxxx 是 Microchip(R) 提供的 8 位微控制器系列。CANopenNode 专为具有集成 CAN模块的用户设计。它使用 PIC18F458 进行了测试。使用的编译器是 Microchip MPLAB C18 >= V3.00。
 
 其他文件包括：
 - memcpyram2flash.h - memcpyram2flash.c 的头文件;
@@ -542,21 +541,22 @@ EEprom 变量在启动时从内部 EEprom 读取到 RAM 中。如果 RAM 改变�
 
 #### 3.1.2 PIC18F458 中的资源
 
-资源                       |  描述
----------------------------|-------------------------------------------
-CAN 模块                    |
-PortB:RB2,RB3             |  CANTX 和 CANRX 接线
-INT2                      |  外部中断 2 – 与 RB2 复用
-PortB:RB4,RB5 (默认)      | LED 指示，引脚可以替换或不用
-TIMER2 模块               |  用于 1ms 定时中断
-PWM 模块                  |  可以自由使用，除非 PWM 频率由 TIMER2 初始化设置
-Interrupts                |  高低优先级中断均使用，用户可以添加自己的中断资源
-Program memory            |  17 kB (52%) 默认情况\*
-RAM memory                |  662 bytes (43%) 默认情况\*
+| 资源                 | 描述                                             |
+| -------------------- | ------------------------------------------------ |
+| CAN 模块             |
+| PortB:RB2,RB3        | CANTX 和 CANRX 接线                              |
+| INT2                 | 外部中断 2 – 与 RB2 复用                         |
+| PortB:RB4,RB5 (默认) | LED 指示，引脚可以替换或不用                     |
+| TIMER2 模块          | 用于 1ms 定时中断                                |
+| PWM 模块             | 可以自由使用，除非 PWM 频率由 TIMER2 初始化设置  |
+| Interrupts           | 高低优先级中断均使用，用户可以添加自己的中断资源 |
+| Program memory       | 17 kB (52%) 默认情况\*                           |
+| RAM memory           | 662 bytes (43%) 默认情况\*                       |
 
-    * 默认情况是基于 \_blank\_project：4 个 RPDO，4 个 TPDO，4 个心跳消费者，8 个错误字段，最大 OD 条目大小 = 20 个字节，闪存和 EEPROM 写入启用，PDO 参数和映射在对象字典中，map size= 8。计算中包含堆栈和 SFR 寄存器。 MPLAB C18 编译器。
+> \* 默认情况是基于 \_blank\_project：4 个 RPDO，4 个 TPDO，4 个心跳消费者，8 个错误字段，最大 OD 条目大小 = 20 个字节，闪存和 EEPROM 写入启用，PDO 参数和映射在对象字典中，map size= 8。计算中包含堆栈和 SFR 寄存器。 MPLAB C18 编译器。
 
 #### 3.1.3 PIC18F458 的特性
+
 进行了一些测量以检查驱动的表现。  
 
 **<u>设置：</u>**
@@ -566,115 +566,91 @@ RAM memory                |  662 bytes (43%) 默认情况\*
 - 4 个发送 PDO，4 个接收 PDO，4 个心跳消费者;
 - 使用不同标识符接收 11 个不同的 CAN 消息，不使用硬件过滤。
     
-                            值          描述
---------------------------------------------------------------------------
-Low Interrupt Latency       19 μs       中断上下文保存。 在中断结束时，上下文被恢复
-                                        并且必须考虑附加的延迟。
-                                        
-Low Interrupt               Max 30 μs
-    – transmit message 
-    
-Low Interrupt – timer       6 μs
+|                                     | 值        | 描述                                                                                                                                                    |
+| ------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Low Interrupt Latency                 | 19 μs     | 中断上下文保存。 在中断结束时，上下文被恢复并且必须考虑附加的延迟。                                                                                     |
+| Low Interrupt – 发送消息              | Max 30 μs |
+| Low Interrupt – 定时器                | 6 μs      |
+| Low Interrupt  – 准备同步传输 PDO 4x. | 55 μs     |
+| High Interrupt Latency                | 1.5 μs    | 中断上下文保存。 在中断结束时，上下文被恢复并且必须考虑附加的延迟。高优先级中断用于接收 CAN 消息。 如果不同 CAN ID 的数量小于或等于 6，则使用硬件过滤。 |
+| High Interrupt – 处理消息             | Max 14 μs |
+| main() - 平均时间                     | 40 μs     |
+| Process SDO – 读／写 RAM               | 160 μs    | CO_OD数组具有有序索引和子索引，因此即使对于。大型对象字典，搜索速度也很快                                                                               |
+| Process SDO – 写 ROM.                 | 20 ms     | 在此期间，微控制器被冻结。如果这是个问题，请在ODE_EEPROM结构中使用RAM变量。                                                                             |
 
-Low Interrupt               55 μs
-    – 准备同步传输 PDOs 4x.
+### 3.2 BECK SC1x + SJA1000 （略）
 
-High Interrupt Latency      1,5 μs      中断上下文保存。 在中断结束时，上下文被恢复
-                                        并且必须考虑附加的延迟。
-                                        高中断用于接收CAN消息。如果不同CAN ID的数
-                                        量小于或等于6，则使用硬件过滤。
-                                        
-High Interrupt              Max 14 μs
-    – process message
-    
-main() - average time       40 μs
-
-Process SDO                 160 μs      CO_OD数组具有有序索引和子索引，因此即使对于。
-    – write to RAM orread.              大型对象字典，搜索速度也很快
- 
-Process SDO                 20 ms       在此期间，微控制器被冻结。如果这是个问题，请
-    – write to ROM.                     在ODE_EEPROM结构中使用RAM变量。
-
-3.2 BECK SC1x + SJA1000 （略）--------------------------------------------------
-
-===============================================================================
 4. 示例和对象字典
 
 示例中的主要文件有：
-    - CO_OD.h - CANopenNode的定义，对象字典的默认值;
-    - CO_OD.c - 用于CANopenNode的变量，验证函数和对象字典;
-    - user.c - 示例函数，可以在用户程序中使用，并且必须定义。
-    - *.eds - 为CANopen配置工具准备的电子数据表。
+
+- **CO_OD.h** - CANopenNode 的定义，对象字典的默认值;
+- **CO_OD.c** - 用于 CANopenNode 的变量，验证函数和对象字典;
+- **user.c** - 示例函数，可以在用户程序中使用，并且必须定义。
+- **\*.eds** - 为 CANopen 配置工具准备的电子数据表。
 
 这些文件包含：
-    - 用于配置CANopenNode的宏;
-    - 对象字典的全局变量;
-    - 变量的默认值;
-    - 对象字典，其中存储了上述变量的地址，索引，子索引和属性;
-    - 验证函数CO_OD_VerifyWrite（），它在写入对象字典之前验证变量的值;
-    - 可以执行用户代码的函数：User_Init（），User_ResetComm（），
-      User_ProcessMain（）和User_Process1msIsr（）。
 
-4.1 _blank_project
+- 用于配置 CANopenNode 的宏;
+- 对象字典的全局变量;
+- 变量的默认值;
+- 对象字典，其中存储了上述变量的地址，索引，子索引和属性;
+- 验证函数 `CO_OD_VerifyWrite()`，它在写入对象字典之前验证变量的值;
+- 可以执行用户代码的函数：`User_Init()`，`User_ResetComm()`，`User_ProcessMain()` 和 `User_Process1msIsr()`。
 
-完整的CANopenNode。用户功能是空的。 它与微控制器无关。
+### 4.1 \_blank\_project
 
-4.2 Example_generic_IO
+完整的 CANopenNode。用户功能是空的。 它与微控制器无关。
 
-用于实现标准CANopen通用输入/输出模块（CiADS401，数字量输入，输出，模拟量输入，输出）的
-示例。它基于_blank_project示例。它与微控制器无关。在User.c文件中必须添加硬件的定义。
+### 4.2 Example\_generic\_IO
+
+用于实现标准 CANopen 通用输入／输出模块（*CiADS401*，数字量输入，输出，模拟量输入，输出）的示例。它基于 *_blank_project* 示例。它与微控制器无关。在 *User.c* 文件中必须添加硬件的定义。
 参见教程。
 
-4.3~4.5 略
+### 4.3~4.5 略
 
-===============================================================================
-5. 结论
+## 5. 结语
 
-标准化的CANopen协议是迈向高质量，可靠和标准化设备的一步。自动化任务现在更容易实现。使
-用8位微控制器的可靠和简单的网络可以使先进的分散控制系统具有智能，简单并因此更可靠的设备。
+标准化的 CANopen 协议是迈向高质量，可靠和标准化设备的一步。自动化任务现在更容易实现。使
+用 8 位微控制器的可靠和简单的网络可以使先进的分散控制系统具有智能，简单并因此更可靠的设备。
 
-除网络外，CANopenNode还为设备提供了必要的功能，这使得CANopen变得更加简单和实用。制造设
-备所需的一切是：设置CANopen通信;使用自定义变量（RAM或Flash或Eeprom）并将它们转换为对象
-字典;编写代码，用于处理这些变量，微控制器资源和CANopen通信对象。它也很灵活，所以自定义代
-码和自定义通信对象也不是问题。
+除网络外，CANopenNode 还为设备提供了必要的功能，这使得 CANopen 变得更加简单和实用。制造设备所需的一切是：设置 CANopen 通信；使用自定义变量（RAM 或 Flash 或 Eeprom）并将它们转换为对象
+字典；编写代码，用于处理这些变量，微控制器资源和 CANopen 通信对象。它也很灵活，所以自定义代码和自定义通信对象也不是问题。
 
-CANopenNode很轻量，所以微控制器中足够的内存和时间对于定制任务而言仍然是自由的。
+CANopenNode 很轻量，所以微控制器中足够的内存和时间对于定制任务而言仍然是自由的。
 
-CANopenNode也可用于主设备，两个示例中显示了这一点，它显示了对网络的高级控制。
+CANopenNode 也可用于主设备，两个示例中显示了这一点，它显示了对网络的高级控制。
 
-===============================================================================
-6. 文献
+## 6. 文献
 
-[CANopenBook]
-Olaf Pfeiffer, Andrew Ayre, Christian Keydel “Embendded Networking with CAN and CANopen”,
-RTC Books, 2003, “http://www.canopenbook.com/”
+[CANopenBook]  
+Olaf Pfeiffer, Andrew Ayre, Christian Keydel "Embendded Networking with CAN and CANopen", RTC Books, 2003, "http://www.canopenbook.com/"
 
-[CiA]
+[CiA]  
 “http ://www.can-cia.org/canopen/ ”
 
-[CiADS301]
-“CANopen Application Layer and Communication Profile”, CiA Draft Standard 301, Version 4.02,
-free access
+[CiADS301]  
+“CANopen Application Layer and Communication Profile”, CiA Draft Standard 301, Version 4.02,free access
 
-[CiADR303-3]
+[CiADR303-3]  
 “CANopen Indicator Specification”, Draft Recommendation 303-3, Version 1.0
 
-[CiADS401]
+[CiADS401]  
 “CANopen Device Profile for Generic I/O Modules”, Draft Standard 401, Version Version 2.1”
 
-[esacademy]
-“http://www.esacademy.com/myacademy/” - Online training.
+[esacademy]  
+http://www.esacademy.com/myacademy/ - Online training.
 
-[Microchip]
+[Microchip]  
 http://www.microchip.com
 
-[Beck-IPC]
+[Beck-IPC]  
 http://www.beck-ipc.com/ipc/index.asp?sp=en
 
-[CANchkEDS]
+[CANchkEDS]  
 “http://www.vector-informatik.com/english/products/canchkeds.php” - EDS checker.
 
-[sourceforge]
+[sourceforge]  
 “http://sourceforge.net/” - Many useful open source projects
 
 
