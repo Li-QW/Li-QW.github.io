@@ -7,7 +7,7 @@ description: CANopenNode 的介绍及使用方法。
 keywords: CANopenNode, Embedded, Fieldbus, CANopen, PIC18F
 ---
  
-> CANopenNode (以前 ;) )是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
+> CANopenNode 是一款为单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
 >
 > 原文件：    [CANopenNode Manual V1.1][R2]  
 > 原作者：    [Janez Paternoster][R3]
@@ -20,13 +20,12 @@ keywords: CANopenNode, Embedded, Fieldbus, CANopen, PIC18F
 
 ## 1. 介绍
 
-**CANopenNode** 是一款为 8 位单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
+**CANopenNode** 是一款为 ~~8 位~~单片机开发的开源程序。可以用在连接 CANbus 的多种设备（传感器，IO 模块，命令界面，控制器等）。程序根据 CANopen 标准编写，故设备可以与其他基于 CANopen 协议的设备通信。
 
 ### 1.1 CAN 与 CANopen 简述
 
 CAN（Controller Area Network)最早是一款应用于汽车的串行总线系统。在工业自动化领域也有广泛应用。由于它具有成本效益（可以在多种8位控制器上实现），因此可大范围应用。
 
-*[CAN]: Controller Area Network
 
 <u>CAN 的一些特性：</u>
 
@@ -130,8 +129,7 @@ CAN（Controller Area Network)最早是一款应用于汽车的串行总线系�
 
 ## 2. 设计
 
-CANopenNode ~~目前~~(很久以前 :smile:)为以下设计：
-
+CANopenNode ~~目前~~(很久很久以前 :smile:)为以下设计：  
 - 8 位 Microchip PIC18FXXX 和 MPLAB C18 编译器（>= V3.00）。
 - 带 Philips SJA1000 和 Borland C ++ 5.02 编译器的 16 位 BECK SC1X。
 - 可以翻译成与其他编译器和微控制器一起使用。
@@ -144,38 +142,30 @@ CANopenNode 是开源的。使用 `LGPL许可证`，这意味着许可证只能�
 
     
 + **\_doc文件夹** —— 说明文件
-
     - Manual.pdf —— 该手册的 pdf 版
     - Manual.odt —— 该手册的 OpenOffice 格式
     - Tutorial.pdf —— 使用指南的 pdf 版
     - Tutorial.odt —— 使用指南的 OpenOffice 格式
     - fdl.txt —— GNU 免费文档许可
-
 + **\_src文件夹** —— CANopenNode 源文件。分为 CANopen 文件夹和多个示例文件夹。
-
     - lesser.txt —— GNU 较低通用公共许可证
     - readme.txt —— 说明，如何打开示例项目
     - *.mcp,*.ide 文件 —— 示例工程文件
     - **CANopen文件夹** —— 除对象字典外，所有 CANopenNode 特定文件。在一个具有多个 CANopen 设备的项目中，该文件夹对于所有设备（如库）可以是通用的：
-
         - CANopen.h —— CANopenNode 的主头文件。 包括一般定义和其他头文件;
         - CO_stack.c —— 大部分 CANopenNode 代码;
         - CO_errors.h —— 所有错误的定义，可能发生在程序中。还为紧急错误代码和用于计算错误寄存器的定义赋值。对于用户程序，可以添加用户错误的定义;
         - CO_OD.txt —— 对象字典条目和 SDO 中止代码的简短描述;
         - **子文件夹** —— 微控制器特定代码：
-
             - main.c —— 中断，timer1ms 和主函数的初始化和定义;
             - CO_driver.h —— 处理器/编译器特定的宏;
             - CO_driver.c —— 处理器/编译器特定函数;
             - 其他特殊文件
-
     - **\_blank_project** —— 示例项目，它没有用户特定的代码。 适用于所有微控制器：
-
         - CO_OD.h —— 对象字典的头文件和 CANopenNode 的主设置;
         - CO_OD.c —— CANopenNode 的变量，验证函数和对象字典;
         - user.c —— 示例函数，可以在用户程序中使用，并且必须定义。
         - _blank_project.eds —— EDS 使用默认配置;
-
     - **其他示例项目文件夹** —— 请参阅手册和教程。
 
 
@@ -668,3 +658,20 @@ http://www.beck-ipc.com/ipc/index.asp?sp=en
 [P2-3]:https://us1.myximage.com/2018/03/26/e58ad775a6dfc15ebf0439f7c42a9f4b.png "接收CAN消息"
 [P2-4]:https://us1.myximage.com/2018/03/26/cf4a591766551da0f928634782e25284.png "发送CAN消息"
 [P2-5]:https://us1.myximage.com/2018/03/26/1d35203fdfb71ea3ac94e3760ca8723e.png "CANopenNode主线处理流程图"
+
+<!-- 缩略词 -->
+*[CAN]: Controller Area Network
+
+*[SDO]: Service Data Objects
+
+*[OD]: Object Dictionary 对象字典
+
+*[PDO]: Process Data Objects
+
+*[COB]: Communication Object 通信对象
+
+*[NMT]: Network Management
+
+*[EDS]: Electronic Data Sheets
+
+*[SYNC]: Synchronization 同步
