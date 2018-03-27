@@ -309,7 +309,7 @@ SYNC 消息集成到 CANopenNode 中。它在 Timer 程序内处理。基本时�
 以下函数接受两个参数：
 
 ```c
-void ErrorReport(unsigned char ErrorBit，unsigned int Code);
+void ErrorReport(unsigned char ErrorBit, unsigned int Code);
 ```
     
 `ErrorBit` 对于每种不同的错误情况都是唯一的，`Code` 是客户特定的错误附加信息。如前所述，该函数只设置了一些变量，除此之外，它在 `CO_ErrorStatusBits` 数组中设置适当的位。如果之前已经设置了该位，则不会发生任何事情。这种方式只会在第一次报告具体的错误，稍后的重复会被忽略。
