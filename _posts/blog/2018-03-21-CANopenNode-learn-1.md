@@ -98,7 +98,7 @@ CANopenNode V1.1 采用许可 `GNU Free Documentaion License`.
 
 *Project>Build options>project>general* 中的文件夹设置如图 3.1 所示。
 
-图 3.1 路径设置
+图 3.1 路径设置  
 ![][P3-1]
 
 完整 Include 路径是：
@@ -301,15 +301,10 @@ void User_Init(void){
 
 ```c
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[0] = port_xxx 
-
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[1] = port_xxx  
-
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[2] = port_xxx  
-
 //CHANGE THIS LINE -> ODE_Read_Digital_Input.BYTE[3] = port_xxx  
-
 /* 添加 */  
-
 if(BusyADC() == 0){
     ODE_Read_Analog_Input[0] = ReadADC() >> 2; //8 bit value
     ConvertADC();
