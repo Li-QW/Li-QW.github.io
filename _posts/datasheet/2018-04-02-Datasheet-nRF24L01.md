@@ -31,7 +31,7 @@ keywords: GFSK, nRF24L01+, wireless
 - 输入电压范围 1.9 ~ 3.6 V
 - 增强型 ShockBurst™
 - 自动数据包处理
-- 自动数据包事务处理[^1-a]
+- 自动数据包事务处理
 - 6 路数据通道 MultiCeiver™
 - 与 nRF24L01 直接兼容
 - 在 250 kbps 和 1 Mbps 下 与 nRF2401A，nRF2402，nRF24E1 和 nRF24E2 的无线兼容
@@ -41,7 +41,6 @@ keywords: GFSK, nRF24L01+, wireless
 - 紧凑型 20 引脚 4x4 mm QFN 封装
 
 
-[^1-a]:auto packet transaction handling
 
 # 主要应用场合
 
@@ -199,16 +198,16 @@ nRF24L01+ 的特性主要有：
 
 | 操作条件                          | 最小值    | 最大值    | 单位 |
 | --------------------------------- | --------- | --------- | ---- |
-| 供电电压                          | ——      | ——      | —— |
+| **供电电压**                      |           |           |      |
 | VDD                               | -0.3      | 3.6       | V    |
-| VSS                               | ——      | 0         | V    |
-| 输入电压                          | ——      | ——      | —— |
+| VSS                               |           | 0         | V    |
+| **输入电压**                      |           |           |      |
 | V<sub>I</sub>                     | -0.3      | 5.25      | V    |
-| 输出电压                          | ——      | ——      | —— |
-| V<sub>O</sub>                     | VSS ~ VDD | VSS ~ VDD | —— |
-| 总功耗                            | ——      | ——      | —— |
-| P<sub>D</sub>(T<sub>A</sub>=85°C) | ——      | 60        | mW   |
-| 温度                              | ——      | ——      | —— |
+| **输出电压**                      |           |           |      |
+| V<sub>O</sub>                     | VSS ~ VDD | VSS ~ VDD |      |
+| **总功耗**                        |           |           |      |
+| P<sub>D</sub>(T<sub>A</sub>=85°C) |           | 60        | mW   |
+| **温度**                          |           |           |      |
 | 运行温度                          | -40       | +85       | °C   |
 | 存储温度                          | -40       | +125      | °C   |
 
@@ -273,9 +272,9 @@ nRF24L01+ 的特性主要有：
 | F<sub>CHANNEL 1M</sub> | 非重叠的信道间隔 @ 250kbps/1Mbps | c   |      | 1    |      | MHz  |
 | F<sub>CHANNEL 2M</sub> | 非重叠的信道间隔 @ 2Mbps         | c   |      | 2    |      | MHz  |
 
-    a. 监管标准决定您可以使用的频段。
-    b. 在每个 burst on-air 中的数据速率
-    c. 最小信道间隔 1MHz
+> a. 监管标准决定您可以使用的频段。  
+> b. 在每个 burst on-air 中的数据速率  
+> c. 最小信道间隔 1MHz
 
 
 ## 5.3. 发射操作
@@ -297,7 +296,7 @@ nRF24L01+ 的特性主要有：
 | P<sub>RF1.250</sub> | 第一相邻信道发射功率 1MHz(250kbps  ) |     |      |      | -30  | dBc  |
 | P<sub>RF2.250</sub> | 第二相邻信道发射功率 2MHz(250kbps)   |     |      |      | -45  | dBc  |
 
-    a. 天线负载阻抗  = 15Ω+j88Ω
+> a. 天线负载阻抗  = 15Ω+j88Ω
 
 
 ## 5.4. 接收操作
@@ -338,18 +337,18 @@ nRF24L01+ 的特性主要有：
 |         | C/I<sub>Nth</sub> | N<sup>th</sup> ACS C/I,f<sub>i</sub> > 25MHz               | a   |      | -60  |      | dBc  |
 
 
-    a. Narrow Band (In Band) Blocking measurements:
-       0 to ±40MHz; 1MHz step size
-       For Interferer frequency offsets n*2*fxtal, blocking performance is degraded by approximately 5dB compared to adjacent figures.
+> a. Narrow Band (In Band) Blocking measurements:  
+>    0 to ±40MHz; 1MHz step size  
+>    For Interferer frequency offsets n*2*fxtal, blocking performance is degraded by approximately 5dB compared to adjacent figures.
 
 
 表 9. RX selectivity with nRF24L01+ equal modulation on interfering signal. Measured using Pin = -67dBm for wanted signal.
 
-（略）
+![][T9]
 
 表 10. RX intermodulation test performed according to Bluetooth Specification version 2.0
 
-（略）
+![][T10]
 
 ## 5.5. 晶振规格
 
@@ -384,12 +383,12 @@ nRF24L01+ 的特性主要有：
 
 表 12. 数字量输入引脚
 
-| 符号           | 参数（条件） | 注  | 最小   | 典型 | 最大     | 单位 |
-| -------------- | ------------ | --- | ------ | ---- | -------- | ---- |
-| V<sub>IH</sub> | 输入高电平   |     | 0.7VDD |      | 5.25[^a] | V    |
-| V<sub>IL</sub> | 输入低电平   |     | VSS    |      | 0.3VDD   | V    |
+| 符号           | 参数（条件） | 注  | 最小   | 典型 | 最大             | 单位 |
+| -------------- | ------------ | --- | ------ | ---- | ---------------- | ---- |
+| V<sub>IH</sub> | 输入高电平   |     | 0.7VDD |      | 5.25<sup>a</sup> | V    |
+| V<sub>IL</sub> | 输入低电平   |     | VSS    |      | 0.3VDD           | V    |
 
-[^a]: 如果输入信号 > 3.6V，则 nRF24L01+ 的 VDD 必须介于 2.7V 和 3.3V 之间（3.0V±10％）
+> a: 如果输入信号 > 3.6V，则 nRF24L01+ 的 VDD 必须介于 2.7V 和 3.3V 之间（3.0V±10％）
 
 表 13. 数字量输出引脚
 
@@ -408,8 +407,8 @@ nRF24L01+ 的特性主要有：
 | T<sub>PUP</sub> | 电源上升时间 | a   |      |      | 100  | ms   |
 | T<sub>POR</sub> | 上电复位     | b   | 1    |      | 100  | ms   |
 
-    a. 从 0V 到 1.9V.
-    b. 测量从 VDD 达到 1.9V 到复位结束时.
+> a. 从 0V 到 1.9V.  
+> b. 测量从 VDD 达到 1.9V 到复位结束时.
 
 
 # 6. 无线电控制
@@ -430,7 +429,7 @@ nRF24L01+ 具有内置状态机，可控制芯片工作模式之间的转换。�
 - **可能的操作模式（Possible operating mode）**：可能的操作状态，但在正常操作期间不使用。
 - **过渡状态（Transition state）**：在振荡器启动和 PLL 建立期间使用的时间限制状态。
 
-当 `VDD` 达到 1.9V 或更高时，nRF24L01+ 进入上电复位状态，保持复位状态直到进入掉电模式。
+当 **VDD** 达到 1.9V 或更高时，nRF24L01+ 进入上电复位状态，保持复位状态直到进入掉电模式。
 
 ![][P4]
 
@@ -442,49 +441,285 @@ nRF24L01+ 具有内置状态机，可控制芯片工作模式之间的转换。�
 
 #### 6.1.3.1. 待机模式-I
 
-通过将 `CONFIG` 寄存器中的 `PWR_UP` 位设置为 1，器件进入待机模式-I。 待机模式-I 用于在保持较短的启动时间的同时将平均电流消耗降至最低。在这种模式下，只有部分晶体振荡器处于活动状态。只有特定情况下才会切换到活动模式，即在 `CE` 为高电平且将 `CE` 置为低电平时。nRF24L01 将从 TX 和 RX 模式返回到待机模式-I。
+通过将 `CONFIG` 寄存器中的 `PWR_UP` 位设置为 1，器件进入待机模式-I。 待机模式-I 用于在保持较短的启动时间的同时将平均电流消耗降至最低。在这种模式下，只有部分晶体振荡器处于活动状态。只有特定情况下才会切换到活动模式，即在 **CE** 为高电平且将 **CE** 置为低电平时。nRF24L01 将从 TX 和 RX 模式返回到待机模式-I。
 
 #### 6.1.3.2. 待机模式-II
 
-在待机模式-II 下，与待机模式-I 相比，额外的时钟缓冲器处于活动状态并使用更多电流。如果 `CE` 在具有空 TX FIFO 的 PTX 设备上保持高电平，nRF24L01+ 进入待机模式-II。如果一个新的数据包上传到 TX FIFO，PLL 立即启动并在正常的 PLL 建立延迟（130μs）后发送数据包。
+在待机模式-II 下，与待机模式-I 相比，额外的时钟缓冲器处于活动状态并使用更多电流。如果 **CE** 在具有空 TX FIFO 的 PTX 设备上保持高电平，nRF24L01+ 进入待机模式-II。如果一个新的数据包上传到 TX FIFO，PLL 立即启动并在正常的 PLL 建立延迟（130μs）后发送数据包。
 
-保持寄存器值并在两种待机模式下均可激活 SPI。 有关启动时间，请参阅<u>表 16</u>。
+寄存器值保持并在两种待机模式下均可激活 SPI。 有关启动时间，请参阅<u>表 16</u>。
+
+### 6.1.4. RX 模式
+
+RX 模式是将 nRF24L01+ 用作接收器的主动模式。要进入该模式，nRF24L01+ 必须将 `PWR_UP` 位，`PRIM_RX` 位和 **CE** 引脚设置为高电平。
+
+在接收模式下，接收器解调来自射频通道的信号，不断向基带协议引擎提供解调数据。基带协议引擎持续搜索有效的数据包。如果找到了有效的数据包（通过匹配的地址和有效的 CRC），数据包的 payload 将存于 RX FIFO 的空缺位置。如果 RX FIFO 已满，则丢弃接收的数据包。
+
+nRF24L01+ 保持RX模式，直到 MCU 将其配置为待机模式-I 或掉电模式。但是，如果基带协议引擎中的自动协议功能（增强型 ShockBurst™）已启用，nRF24L01+ 可以进入其他模式以执行协议。
+
+在接收模式下，接收功率检测器（RPD, Received Power Detector）信号可用。RPD 是一个信号，它当接收频道内检测到高于-64 dBm的 RF 信号时被设置为高电平。内部 RPD 信号在提供给 RPD 寄存器之前被过滤。在 RPD 设置为高电平之前，RF信号必须至少存在 40 μs。<u>第 6.4 节</u>描述了如何使用 RPD。
+
+### 6.1.5. TX 模式
+
+TX 模式是发送数据包的主动模式。要进入该模式，nRF24L01+ 必须为下面的状态， `PWR_UP` 位置高，将 `PRIM_RX` 位置低，TX FIFO 中有 payload 且 **CE** 上的高电平脉冲超过 10 μs。
+
+nRF24L01+ 一直处于 TX 模式，直到完成数据包发送。如果 **CE** = 0，则 nRF24L01+ 返回待机模式-I。 如果 **CE** = 1，则 TX FIFO 的状态决定下一个操作。 如果 TX FIFO 不为空，则 nRF24L01+ 将保持在 TX 模式并发送下一个数据包。如果 TX FIFO 为空，则 nRF24L01+ 进入待机模式-II。 处于 TX 模式时，nRF24L01+ 发送 PLL 工作在开环状态。重要的是，不要一次将 nRF24L01+ 在 TX 模式下保持超过 4 ms。如果启用增强 ShockBurst™ 功能，则 nRF24L01+ 绝不会在 TX 模式下大于 4 ms。
+
+### 6.1.6. 工作模式配置
+
+下面的表格描述了怎样配置工作模式。
+
+表 15. 主要工作模式
+
+| 模式        | `PWR_UP` | `PRIM_RX` | **CE** | FIFO 状态                                                    |
+| ----------- | -------- | --------- | ------ | ------------------------------------------------------------ |
+| RX 模式     | 1        | 1         | 1      | -                                                            |
+| TX 模式     | 1        | 0         | 1      | 数据在 TX FIFO 中。将清空 TX FIFO 的所有 level。<sup>a</sup> |
+| TX 模式     | 1        | 0         | 1→0    | 数据在 TX FIFO 中。将清空 TX FIFO 的一个 level。<sup>b</sup> |
+| 待机模式-II | 1        | 0         | 1      | TX FIFO 为空                                                 |
+| 待机模式-I  | 1        | -         | 0      | 无数据传输                                                   |
+| 掉电模式    | 0        | -         | -      | -                                                            |
+
+> a. 如果 **CE** 保持高电平，则所有 TX FIFO 都清空，并执行所有必要的 ACK 和可能的重发。只要 TX FIFO 被重新填充，发送就会继续。如果 **CE** 仍为高电平时 TX FIFO 为空，则 nRF24L01+ 进入待机模式-II。 在这种模式下，只要在将数据包上载（UL）到 TX FIFO 之后将 **CSN** 设置为高电平，就立即开始发送数据包。  
+> b. 该工作模式将 **CE** 脉冲至少持续 10 μs，允许发送一个数据包。这是正常的工作模式。数据包发送完成后，nRF24L01+ 进入待机模式-I。
+
+### 6.1.7. 时序信息
+
+本节中的时序信息涉及模式之间的转换和 **CE** 引脚的时序。 从 TX 模式到 RX 模式（或反过来）的转换与从待机模式到 TX 模式或 RX 模式（最大 130 μs）的转换相同，如下表。
+
+表 16. 操作时间  
+
+![][T16]
+
+> a. 有关晶振规格，请参见<u>表 11</u>。
+
+nRF24L01+ 从掉电模式进入 TX 或 RX 模式必须首先通过待机模式。在nRF24L01+ 离开掉电模式之后， **CE** 设置为高电平之前，必须有一个延迟 Tpd2stby（见<u>表 16</u>）。
+
+> 注：如果 VDD 关闭，寄存器值将丢失，必须在进入 TX 或 RX 模式之前配置 nRF24L01+。
+
+## 6.2. 无线传输速率
+
+无线传输速率（air data rate）是 nRF24L01+ 在发送和接收数据时使用的调制信号速率。它可以是 250 kbps，1 Mbps 或 2 Mbps。使用较低的无线传输速率比较高的无线传输速率提供更好的接收器灵敏度。然而，较高的无线传输速率可使平均电流消耗较低，并且可减少空中碰撞的可能性。
+
+无线传输速率由 `RF_SETUP` 寄存器中的 `RF_DR` 位设置。发射端和接收端必须以相同的无线传输速率进行编程才能相互通信。
+nRF24L01+ 与 nRF24L01 完全兼容。若与 nRF2401A，nRF2402，nRF24E1 和 nRF24E2 兼容，无线传输速率必须设置为 250 kbps 或 1M bps。
+
+## 6.3. RF 信道频率
+
+RF 信道频率决定了 nRF24L01+ 使用的信道的中心。该信道在 250 kbps 和 1M bps 下占用带宽小于 1 MHz，在 2 Mbps 下带宽小于 2 MHz。nRF24L01+ 可以在 2.400 GHz 至 2.525 GHz 的频率下工作。RF 信道频率设置的编程分辨率为 1 MHz。
+
+在 2 Mbps 时，信道占用的带宽比 RF 信道频率设置的分辨率更宽。为确保 2 Mbps 模式下信道不重叠，信道间隔必须为 2 MHz 或更高。在 1 Mbps 和 250 kbps 时，信道带宽与 RF 频率的分辨率相同或更低。
+
+RF 信道频率由 `RF_CH` 寄存器根据以下公式设置：
+
+*F<sub>0</sub> = 2400 + `RF_CH` [MHz]*
+
+发射端和接收端必须以相同的 RF 信道频率进行编程才能相互通信。
 
 
-    2018.4.3. 搁
+## 6.4. 接收功率检测器
+
+功率等级位于接收的 RF 信道中，当接收的功率等级超过 -64 dBm 时，位于寄存器 09，位 0 中的接收功率检测器（RPD）触发。如果接收功率小于 -64 dBm，则 RDP = 0。
+
+当 nRF24L01+ 处于接收模式时，可随时读出 RPD。它提供了该频道当前接收功率等级的快照（snapshot）。接收到有效数据包后，RPD 状态被锁存，然后指示来自己方的发射端的信号强度。如果没有收到数据包，RPD 在接收周期结束时锁存，主 MCU 设置 CE 为低电平或 RX 超时由增强型 ShockBurst™ 控制。
+
+当接收模式启用且等待时间 Tstby2a + Tdelay_AGC = 130 us + 40 us 后，RPD 状态是正确的。RX 增益随温度变化，这意味着 RPD 阈值也随温度而变化。在 T = -40 °C 时，RPD 阈值降低了 -5 dB，并在 85 °C 时增加了 +5dB。
+
+## 6.5. 功率放大器控制
+
+功率放大器（PA，Power Amplifier）控制用于设置 nRF24L01+ 功率放大器的输出功率。在 TX 模式下，PA 控制有四个可编程步骤，参见<u>表17</u>。
+
+功率放大器控制由 `RF_SETUP` 寄存器中的 `RF_PWR` 位设置。
+
+| SPI RF-SETUP</br>(`RF_PWR`) | RF 输出功率 | 直流电流损耗 |
+| :-------------------------: | ----------: | -----------: |
+| 11                          | 0dBm        | 11.3mA       |
+| 10                          | -6dBm       | 9.0mA        |
+| 01                          | -12dBm      | 7.5mA        |
+| 00                          | -18dBm      | 7.0mA        |
+
+> 条件： **VDD** = 3.0 V, **VSS** = 0 V, T<sub>A</sub> = 27 ℃， 负载阻抗 = 15Ω+j88Ω。
+
+## 6.6. RX／TX 控制
+
+RX／TX 控制由 `CONFIG` 寄存器中 `PRIM_RX` 位配置，可以设置 nRF24L01+ 的发送／接收模式。
+
+# 7. 增强型 ShockBurst™ 
+
+增强型 ShockBurst™ 是基于数据包的数据链路层，具有自动数据包组装和定时，自动应答和数据包重发功能。增强型 ShockBurst™ 可实现与低成本微控制器主机之间的超低功耗和高性能通信。增强型 ShockBurst™ 功能可显著提高双向和单向系统的电源效率，而不会增加主机控制器端的复杂性。
+
+## 7.1. 特性
+
+增强型 ShockBurst™ 的主要特点是：
+- 1 到 32 字节的动态 payload 长度
+- 自动数据包处理
+- 自动数据包事务处理
+    - 带 payload 的自动应答
+    - 自动重发
+- 6 个数据通道 MultiCeiver™，用于 1：6 星形网络
+
+## 7.2. 增强型 ShockBurst™ 概述
+
+增强型 ShockBurst™ 使用 ShockBurst™ 进行自动数据包处理和定时。在传输过程中，ShockBurst™ 组装数据包并对数据包中的位进行时钟传输。在接收期间，ShockBurst™ 不断在解调信号中搜索有效地址。当 ShockBurst™ 发现一个有效的地址时，处理数据包的其余部分并通过 CRC 验证它。如果数据包有效，则将 payload 移入 RX FIFO 中的空闲位置。所有高速位处理和时序均由 ShockBurst™ 控制。
+
+增强型 ShockBurst™ 具有自动数据包事务处理（automatic packet transaction handling）功能，可轻松实现可靠的双向数据链接。增强型 ShockBurst™ 数据包事务是两个收发器之间的数据包交换，一个收发器充当主接收器（PRX，Primary Receiver），另一个收发器充当主发送器（PTX，Primary Transmitter）。增强型 ShockBurst™ 数据包事务始​​终由 PTX 的数据包发送来启动，当 PTX 收到来自 PRX 的应答数据包（ACK 数据包）时，事务完成。PRX 可以将用户数据附加到 ACK 数据包，从而启用双向数据链接。
+
+自动数据包事务处理的工作原理如下：
+
+1. 通过从 PTX 向 PRX 发送数据包开始事务。增强型 ShockBurst™ 自动将 PTX 设置为接收模式，以等待ACK 数据包。
+2. 如果 PRX 接收到数据包，增强型 ShockBurst™ 会在返回到接收模式之前自动组合并向 PTX 发送应答数据包（ACK 数据包）。
+3. 如果 PTX 没有立即收到 ACK 数据包，增强型 ShockBurst™ 会在可编程的延迟后自动重发原始数据包，并将 PTX 设置为接收模式以等待 ACK 数据包。
+
+在增强型 ShockBurst™ 中，可以配置参数，例如最大重传发数和从一次传输到下一次重传的延迟。所有的自动处理都是在没有 MCU 参与的情况下完成的。
+
+## 7.3. 增强型 Shockburst™ 数据包格式
+
+本节介绍增强型 ShockBurst™ 数据包的格式。 增强型 ShockBurst™ 数据包包含前导码，地址，数据包控制，payload 和 CRC 字段。图 5. 显示了左侧 MSB 的数据包格式。
+
+图 5. 带 payload（0-32 字节）的数据包
+
+| 前导码 | 地址     | 包控制字段 | Payload   | CRC      |
+| ------ | -------- | ---------- | --------- | -------- |
+| 1 字节 | 3-5 字节 | 9 位       | 0-32 字节 | 1-2 字节 |
+        
+### 7.3.1. 前导码
+
+前导码是用于将接收解调器与输入比特流同步的比特序列。前导码是一个字节长，可以是 `01010101` 或 `10101010`。如果地址中的第一位是 `1`，则前导码自动设置为 `10101010`，如果第一位为 `0`，则前导码自动设置为 `01010101`。这样做是为了确保在在前导码中有足够的过渡来稳定接收器。
+
+### 7.3.2. 地址
+
+这是接收器的地址。地址确保数据包被正确的接收器检测并接收，防止多个 nRF24L01+ 系统之间发生意外串扰。可以将 `AW` 寄存器中的地址字段宽度配置为 3,4 或 5 个字节，请参阅<u>表 28</u>。
+
+> 注意：电平只变化一次的地址（像，`000FFFFFFF`）通常可以在噪声中检测到，并且可能导致错误检测，这可能会导致包错误率（Packet Error Rate）升高。作为前导延续（高低切换）的地址也会增加包错误率。
+
+### 7.3.3. 包控制字段
+
+图 6 显示了 9 位数据包控制字段的格式，MSB 在左边。
+
+| Payload 长度 | PID  | NO_ACK |
+| ------------ | ---- | ------ |
+| 6 位         | 2 位 | 1 位   |
+
+包控制字段包含一个 6 位的 payload 长度字段，一个 2 位的 PID（数据包识别）和一个 1 位的 `NO_ACK` 标志。
+
+#### 7.3.3.1. Payload 长度
+
+这 6 位字段指示以字节为单位的 Payload 长度。Payload 的长度可以从 0 到 32 个字节。
+
+编码：000000 = 0 字节（仅用于空的 ACK 包） 100000 = 32 字节，100001 = 不需关心。
+
+只有在启用动态 Payload 长度（Dynamic Payload Length）功能的情况下才会使用此字段。
+
+#### 7.3.3.2. PID（包识别，Packet identification）
+
+2 位 PID 字段用于检测接收到的数据包是新的还是重新发送的。PID 防止 PRX 设备向接收主机 MCU 多次提供相同的 Payload。对于通过 SPI 接收到的每个新数据包，PID 字段在 TX 端递增。PRX 设备用 PID 和 CRC 字段（请参阅<u>第7.3.5节</u>）确定数据包是重发的还是新的。当链路上有多个数据包丢失时，PID 字段可能会等于上一次接收到的 PID。如果数据包与前一个数据包具有相同的 PID，则 nRF24L01+ 将比较两个数据包的 CRC 总和。如果 CRC 总和也相等，则最后收到的数据包被认为是先前收到的数据包的副本并丢弃。
+
+#### 7.3.3.3. 无应答标志（`NO_ACK`）
+
+可选择的自动应答功能控制 `NO_ACK` 标志。
+
+该标志仅在使用自动应答功能时使用。将标志设置为高，告诉接收器该数据包不用自动应答。
+
+在 PTX 上，可以使用以下命令在包控制字段中设置 `NO_ACK` 标志位：
+
+`W_TX_PAYLOAD_NOACK`
+
+但是，必须先设置 `FEATURE` 寄存器中的 `EN_DYN_ACK` 位以启用该功能。当您使用此选项时，PTX 在传输数据包后直接进入待机模式-I。PRX 在收到数据包时不发送 ACK 数据包。
+
+
+### 7.3.4. Payload
+
+Payload 是用户定义的数据包内容。它可以是 0 到 32 个字节宽，并在上传到 nRF24L01+ 时无线传输。
+
+增强型 ShockBurst™ 提供两种处理 Payload 长度的方案：静态和动态。
+
+默认值是静态 Payload 长度。 对于静态 Payload 长度，发射端和接收端之间的所有数据包具有相同的长度。静态 Payload 长度由接收端的 `RX_PW_Px` 寄存器设置。发送端的 Payload 长度由时钟输入到 TX_FIFO 的字节数设置，并且必须等于接收器端 `RX_PW_Px` 寄存器中的值。
+
+动态 Payload 长度（DPL，Dynamic Payload Length）是静态 Payload 长度的替代。DPL 使发送端能够向接收端发送具有可变 Payload 长度的包。这意味着对于具有不同 Payload 长度的系统，不需要将数据包长度扩展到最长的 Payload。
+
+借助 DP L功能，nRF24L01+ 可以自动解码接收数据包的 Payload 长度，而不是使用 `RX_PW_Px` 寄存器。MCU 可以使用 `R_RX_PL_WID` 命令读取接收到的有效负载的长度。
+
+> 注意：使用 `R_RX_PL_WID` 命令时，请始终检查报告的数据包宽度是否为 32 字节或更短。如果它的宽度大于 32 字节，则数据包有错误且必须丢弃。使用 `Flush_RX` 命令丢弃数据包。
+
+为了启用 DPL，必须使能 `FEATURE` 寄存器中的 `EN_DPL` 位。在 RX 模式下，必须设置 `DYNPD` 寄存器。要发送到一个启用 DPL 的 PRX，PTX 必须设置 `DYNPD` 中的 `DPL_P0` 位。
+
+### 7.3.5. CRC (循环冗余校验) 
+
+CRC 是数据包中的强制错误检测机制。它具有 1 或 2 个字节，通过地址、包控制字段和 Payload 进行计算。
+
+1 字节 CRC 的多项式为 X<sup>8</sup> + X<sup>2</sup> + X + 1。初始值 0xFF。
+
+2 字节 CRC 的多项式为 X<sup>16</sup> + X<sup>12</sup> + X<sup>5</sup> + 1。初始值 0xFFFF。
+
+CRC 中的字节数由 `CONFIG` 寄存器中的 `CRCO` 位设置。 如果 CRC 失败，增强型 ShockBurst™ 不接受数据包。
+
+### 7.3.6. 自动组包
+
+自动组包主要组合前导码、地址、数据包控制字段、Payload 和 CRC，在发送之前创建一个完整的数据包。
+
+图 7. 自动组包流程图
+
+![][P7]
+
+
+
+### 7.3.7. 自动拆包
+
+数据包通过验证后，增强型 ShockBurst™ 拆解数据包，并将 Payload 加载到 RX FIFO 中，然后产生 `RX_DR` IRQ。
+
+图 8. 自动拆包流程图
+
+![][P8]
+
+## 7.4. 自动包事务处理
+
+增强型 ShockBurst™ 具有两种自动数据包事务处理功能：自动应答和自动重发。
+
+### 7.4.1. 自动应答
+
+自动应答功能可在收到并确认数据包后自动将 ACK 数据包发送至PTX。自动应答功能降低了系统 MCU 的负载，并且可以消除对专用 SPI 硬件的需求。这也降低了成本和平均电流消耗。自动应答功能通过设置 `EN_AA` 寄存器来启用。
+
+> 注意：如果收到的数据包设置了 `NO_ACK` 标志，则不执行自动应答。
+
+ACK 数据包可以包含从 PRX 到 PTX 的可选 Payload。为了使用此功能，必须启用动态 Payload 长度（DPL）功能。PRX 端的 MCU 必须通过使用 `W_ACK_PAYLOAD` 命令将 Payload 通过时钟发送到 TX FIFO 来上传。Payload 在 TX FIFO（PRX）中等待处理，直到从 PTX 收到新数据包。nRF24L01+ 可以同时在 TX FIFO（PRX）中挂起三个 ACK 数据包 Payload。
+
+图 9. 带 Payload 挂起的 TX FIFO (PRX)
+
+![][P9]
+
+图 9 显示了在处理挂起的 ACK 数据包 Payload 时 TX FIFO（PRX）如何操作。使用 `W_ACK_PAYLOAD` 命令在 MCU 上时钟输入 Payload。地址解码器和缓冲控制器确保 Payload 存储在 TX FIFO（PRX）中的空闲位置。当收到一个数据包时，将通过 PTX 地址通知地址解码器和缓冲器控制器。这样可确保将正确的 Payload 呈现给 ACK 生成器。
+
+如果 TX FIFO（PRX）包含多个到 PTX 的 Payload，则使用先进先出（first in -first out）原则处理 Payload。如果所有挂起的 Payload 都指向（addressed to）一个链路丢失的 PTX，则 TX FIFO（PRX）将被阻塞（blocked）。在这种情况下，MCU 可以使用 `FLUSH_TX` 命令刷新 TX FIFO（PRX）。
+
+为了启用带 Payload 的自动应答功能，必须设置 `FEATURE` 寄存器中的 `EN_ACK_PAY` 位。
+
+
+
+
+
+
+
+
+    2018.4.4. 搁
+
+
+
+
+
+
 -----------------------
 
-6.1.4 RX mode
-6.1.5 TX mode
-6.1.6 Operational modes configuration
-6.1.7 Timing Information
-## 6.2 Air data rate
-## 6.3 RF channel frequency
-## 6.4 Received Power Detector measurements
-## 6.5 PA control
-## 6.6 RX/TX control
-# 7 Enhanced ShockBurst™   
-## 7.1 Features
-## 7.2 Enhanced ShockBurst™ overview
-## 7.3 Enhanced Shockburst™ packet format
-7.3.1 Preamble 
-7.3.2 Address 
-7.3.3 Packet control field 
-7.3.4 Payload
-7.3.5 CRC (Cyclic Redundancy Check) 
-7.3.6 Automatic packet assembly
-7.3.7 Automatic packet disassembly 
-## 7.4 Automatic packet transaction handling 
-7.4.1 Auto acknowledgement 
+
+
 7.4.2 Auto Retransmission (ART)
 Revision 1.0 Page 5 of 78
 nRF24L01+ Product Specification
-## 7.5 Enhanced ShockBurst flowcharts 
+## 7.5 增强型 ShockBurst flowcharts 
 7.5.1 PTX operation
 7.5.2 PRX operation 
 ## 7.6 MultiCeiver™
-## 7.7 Enhanced ShockBurst™ timing 
-## 7.8 Enhanced ShockBurst™ transaction diagram 
+## 7.7 增强型 ShockBurst™ timing 
+## 7.8 增强型 ShockBurst™ transaction diagram 
 7.8.1 Single transaction with ACK packet and interrupts
 7.8.2 Single transaction with a lost packet 
 7.8.3 Single transaction with a lost ACK packet
@@ -561,11 +796,13 @@ Configuration. 78
 *[PTX]:发射源  
 *[PWR_DWN]:掉电  
 *[PWR_UP]:上电  
+*[RPD]:Received Power Detector
 *[RX]:接收  
 *[RX_DR]:接收数据准备就绪  
 *[SPI]: Serial Peripheral Interface 串行外设接口
 *[TX]:发送  
 *[TX_DS]:已发送数据  
+*[基带协议引擎]:baseband protocol engine
 
 <!-- 图片链接 -->
 [P1]:https://us1.myximage.com/2018/04/03/91f68a55e9f4b4ee578c4680ab23ee14.png "nRF24L01+ block diagram"
@@ -575,6 +812,18 @@ Configuration. 78
 [P3]:https://us1.myximage.com/2018/04/03/889a27fddc22d4fb0b178447a18dec20.png "Equivalent crystal components"
 
 [P4]:https://us1.myximage.com/2018/04/03/115a3022c8bf7842380c6d1ced6ddd08.png "Radio control state diagram"
+
+[P7]:https://us1.myximage.com/2018/04/04/3bf9cf646038fc10057d5e33da7857a5.png "Automatic packet assembly"
+
+[P8]:https://us1.myximage.com/2018/04/04/8f5136ccdf0cd22731ef7cbd43807f6e.png "Automatic packet disassembly"
+
+[P9]:https://us1.myximage.com/2018/04/04/20e5814f4f01c0500ca270c6f4a91438.png "TX FIFO (PRX) with pending payloads"
+
+[T9]:https://us1.myximage.com/2018/04/04/a38f922805032f67676a0ad0bbc93609.png 
+
+[T10]:https://us1.myximage.com/2018/04/04/7e7c858ea0f7bec611468f8137fc2218.png 
+
+[T16]:https://us1.myximage.com/2018/04/04/351e0079a57d5beb631bb5a6aa954fa9.png 
 
 
 <!--  
@@ -602,14 +851,7 @@ Configuration. 78
 ### 2.1 工作模式
 
 nRF24L01 可以设置为以下几种主要的模式
-| 模式        | PWR_UP | PRIM_RX | CE  | FIFO 寄存器状态               |
-| ----------- | ------ | ------- | --- | ----------------------------- |
-| 接收模式    | 1      | 1       | 1   | -                             |
-| 发送模式    | 1      | 0       | 1   | 数据在 TX FIFO 寄存器中       |
-| 发送模式    | 1      | 0       | 1→0 | 停留在发送模式 直至数据发送完 |
-| 待机模式 II | 1      | 0       | 1   | TX FIFO 为空                  |
-| 待机模式 I  | 1      | -       | 0   | 无数据传输                    |
-| 掉电模式    | 0      | -       | -   | -                             |
+
 
 nRF24L01 在不同模式下的引脚功能
 | 引脚名称 | 方向     | 发送模式                | 接收模式 | 待机模式 | 掉电模式 |
