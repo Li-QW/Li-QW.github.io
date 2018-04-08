@@ -502,7 +502,7 @@ nRF24L01+ 从掉电模式进入 TX 或 RX 模式必须首先通过待机模式�
 无线传输速率（air data rate）是 nRF24L01+ 在发送和接收数据时使用的调制信号速率。它可以是 250 kbps，1 Mbps 或 2 Mbps。使用较低的无线传输速率比较高的无线传输速率提供更好的接收器灵敏度。然而，较高的无线传输速率可使平均电流消耗较低，并且可减少空中碰撞的可能性。
 
 无线传输速率由 `RF_SETUP` 寄存器中的 `RF_DR` 位设置。发射端和接收端必须以相同的无线传输速率进行编程才能相互通信。
-nRF24L01+ 与 nRF24L01 完全兼容。若与 nRF2401A，nRF2402，nRF24E1 和 nRF24E2 兼容，无线传输速率必须设置为 250 kbps 或 1M bps。
+nRF24L01+ 与 nRF24L01 完全兼容。若与 nRF2401A，nRF2402，nRF24E1 和 nRF24E2 兼容，无线传输速率必须设置为 250 kbps 或 1 Mbps。
 
 ## 6.3. RF 信道频率
 
@@ -531,12 +531,12 @@ RF 信道频率由 `RF_CH` 寄存器根据以下公式设置：
 
 功率放大器控制由 `RF_SETUP` 寄存器中的 `RF_PWR` 位设置。
 
-| SPI RF-SETUP</br>(`RF_PWR`) | RF 输出功率 | 直流电流损耗 |
-| :-------------------------: | ----------: | -----------: |
-| 11                          | 0dBm        | 11.3mA       |
-| 10                          | -6dBm       | 9.0mA        |
-| 01                          | -12dBm      | 7.5mA        |
-| 00                          | -18dBm      | 7.0mA        |
+| SPI RF-SETUP (`RF_PWR`) | RF 输出功率 | 直流电流损耗 |
+| :---------------------: | ----------: | -----------: |
+| 11                      | 0dBm        | 11.3mA       |
+| 10                      | -6dBm       | 9.0mA        |
+| 01                      | -12dBm      | 7.5mA        |
+| 00                      | -18dBm      | 7.0mA        |
 
 > 条件： **VDD** = 3.0 V, **VSS** = 0 V, T<sub>A</sub> = 27 ℃， 负载阻抗 = 15Ω+j88Ω。
 
@@ -677,7 +677,7 @@ CRC 中的字节数由 `CONFIG` 寄存器中的 `CRCO` 位设置。 如果 CRC �
 
 ### 7.4.1. 自动应答
 
-自动应答功能可在收到并确认数据包后自动将 ACK 数据包发送至PTX。自动应答功能降低了系统 MCU 的负载，并且可以消除对专用 SPI 硬件的需求。这也降低了成本和平均电流消耗。自动应答功能通过设置 `EN_AA` 寄存器来启用。
+自动应答功能可在收到并确认数据包后自动将 ACK 数据包发送至 PTX。自动应答功能降低了系统 MCU 的负载，并且可以消除对专用 SPI 硬件的需求。这也降低了成本和平均电流消耗。自动应答功能通过设置 `EN_AA` 寄存器来启用。
 
 > 注意：如果收到的数据包设置了 `NO_ACK` 标志，则不执行自动应答。
 
@@ -693,6 +693,149 @@ ACK 数据包可以包含从 PRX 到 PTX 的可选 Payload。为了使用此功�
 
 为了启用带 Payload 的自动应答功能，必须设置 `FEATURE` 寄存器中的 `EN_ACK_PAY` 位。
 
+### 7.4.2. 自动重发（ART）
+
+自动重发是一种在未收到 ACK 数据包的情况下重发数据包的功能。它用于 PTX 上的自动确认系统。当数据包未被确认时，可以通过设置 `SETUP_RETR` 寄存器中的 `ARC` 位来设置允许重传的次数。每次发送数据包时，PTX 进入接收模式，并等待一个短时间的 ACK 数据包。PTX 处于 RX 模式的时间段取决于以下条件：
+
+- 自动重发延迟（ARD）已过。
+- 250 μs 内无地址匹配（或 250 kbps模式下 500 μs）。
+- 收到数据包后（CRC 正确与否）。
+
+当收到 ACK 数据包时，nRF24L01+ 断言 `TX_DS` IRQ。
+
+如果 TX FIFO 中没有未发送的数据且 **CE** 引脚为低电平，nRF24L01+ 进入待机模式-I。如果未收到 ACK 数据包，nRF24L01+ 将在 ARD 定义的延迟后返回到 TX 模式并重新发送数据。一直持续到收到应答，或达到最大重发数为止。
+
+每丢失一个数据包，`OBSERVE_TX` 寄存器中的两个数据包丢失计数器 `ARC_CNT` 和 `PLOS_CNT` 就会自增。`ARC_CNT` 计算当前事务的重发次数。可通过启动新的事务来重置 `ARC_CNT`。`PLOS_CNT` 计算自上次频道更改以来的重传总数。通过写入 `RF_CH` 寄存器来重置 `PLOS_CNT`。可以使用 `OBSERVE_TX` 寄存器中的信息对信道质量进行总体评估。
+
+ARD 定义了从传输数据包的末端到 PTX 重新开始传输的时间。ARD 设置在 `SETUP_RETR` 寄存器中，步长为 250 μs。如果 PTX 未收到 ACK 数据包，则重新发送。
+
+使用带有 Payload 的 ACK 数据包时，ARD 的长度有限制。ARD 时间不得少于 ACK 数据包的启动时间和空中传播时间的总和：
+
+- 对于 2 Mbps 数据速率和 5 字节地址; 15 字节是最大的 ACK 包 Payload 长度 ARD = 250 μs（复位值）。
+- 对于 1 Mbps 数据速率和 5 字节地址; 5 字节是最大 ACK 包 Payload 长度 ARD = 250 μs（复位值）。
+
+ARD = 500 μs 对于 1 或 2 Mbps模式下的任何 ACK Payload 长度都足够长。
+
+- 对于 250 kbps 数据速率和 5 字节地址，以下值适用：
+
+表 18. 250 kbps 下不同重传延迟时间的最大 ACK Payload 大小
+
+| ARD    | ACK 包大小 (字节)     |
+| ------ | --------------------- |
+| 1500µs | 所有 ACK payload 大小 |
+| 1250µs | ≤ 24                  |
+| 1000µs | ≤ 16                  |
+| 750µs  | ≤ 8                   |
+| 500µs  | 空 ACK 无 Payload     |
+
+作为自动重发的替代方案，可以手动设置 nRF24L01+ 多次重发数据包。这由 `REUSE_TX_PL` 命令完成。当使用此命令时，每次 MCU 发起数据包发送时必须在 **CE** 引脚上附带脉冲。
+
+
+## 7.5. 增强型 ShockBurst 流程图
+
+ 本节包含增强型 ShockBurst™ 中 PTX 和 PRX 操作流程图概述。
+
+### 7.5.1. PTX 操作
+
+<u>图 10</u> 中的流程图描述了配置为 PTX 的 nRF24L01+ 在进入待机模式-I 后的操作。
+
+图 10. 增强型 ShockBurst™ 下 PTX 操作流程
+
+![][P10]
+
+> 注：ShockBust™ 操作用虚线框标出。
+
+通过将 **CE** 引脚设置为高电平来激活 PTX 模式。如果 TX FIFO 中存在数据包，则 nRF24L01+ 进入 TX 模式并发送数据包。如果启用了自动重发功能，状态机检查是否设置了 `NO_ACK` 标志。如果未设置，则 nRF24L01+ 进入 RX 模式以接收 ACK 数据包。如果收到的 ACK 数据包为空，则只有 `TX_DS` IRQ 被置位。如果 ACK 数据包包含 Payload，则在 nRF24L01+ 返回待机模式-I 之前，`TX_DS` IRQ 和 `RX_DR` IRQ 同时被置位。
+
+如果在超时发生之前未收到 ACK 数据包，则 nRF24L01+ 将返回到待机模式-II。在 ARD 到达之前，它一直处于待机模式-II。如果重发次数还没有达到 ARC，则nRF24L01+ 进入 TX 模式并再次发送最后一个数据包。
+
+在执行自动重发功能时，重发次数可以达到 ARC 中定义的最大数量。如果发生这种情况，nRF24L01+ 会置位 `MAX_RT` IRQ并返回待机模式-I。
+
+如果 **CE** 为高电平且 TX FIFO 为空，则 nRF24L01+ 进入待机模式-II。
+
+### 7.5.2. PRX 操作 
+
+<u>图 11</u> 中的流程图描述了配置为 PRX 的 nRF24L01+ 在进入待机模式-I 后的操作。
+
+图 11. 增强型 ShockBurst™ 下 PRX 操作流程
+
+![][P11]
+
+> 注：ShockBust™ 操作用虚线框标出。
+
+通过将 **CE** 引脚设置为高电平来激活 PRX 模式。nRF24L01+ 进入 RX 模式并开始搜索数据包。如果接收到数据包并启用了自动应答功能，nRF24L01+ 将决定数据包是新数据包还是先前接收数据包的副本。如果数据包是新的，则 Payload 在 RX FIFO 中可用，并且 `RX_DR` IRQ被置位。如果从发送器接收到的最后一个数据包被带有 Payload 的 ACK 数据包应答，则 `TX_DS` IRQ指示 PTX 收到带有 Payload 的 ACK 数据包。如果接收数据包中没有设置 `No_ACK` 标志，则 PRX 进入 TX 模式。如果 TX FIFO 中有一个挂起的 Payload，它将附加到 ACK 数据包。ACK 数据包传输完成后，nRF24L01+ 返回 RX 模式。
+
+如果 ACK 数据包丢失，可能会收到先前收到的数据包的副本。在这种情况下，PRX 在返回 RX 模式之前丢弃接收的数据包并发送 ACK 数据包。
+
+## 7.6. MultiCeiver™
+
+MultiCeiver™ 是一种用于 RX 模式的功能，它包含一组具有唯一地址的六个并行数据通道（data pipe）。数据通道是物理 RF 信道中的逻辑信道。每个数据通道在 nRF24L01+ 中都有自己的物理地址（数据通道地址）解码。
+
+图 12. 使用 MultiCeiver™ 方式的 PRX
+
+![][P12]
+
+配置为 PRX（主接收器）的 nRF24L01+ 可以在一个频道中接收发往六个不同数据通道的数据，如<u>图 12</u> 所示。每个数据通道都有其自己的唯一地址，并可针对独立行为进行配置。
+
+配置为 PTX 的最多六个 nRF24L01+ 可以与一个配置为 PRX 的 nRF24L01+ 进行通信。同时搜索所有数据通道地址。一次只有一个数据通道可以接收数据包。所有数据通道都可以执行增强型 ShockBurst™ 功能。
+
+以下设置对所有数据通道通用：
+
+- 启用／禁用 CRC（增强型 ShockBurst™ 启用时，CRC 始终启用）
+- CRC 编码方案
+- 接收地址宽度
+- 频道
+- 无线数据速率
+- LNA 增益
+数据通道使用 `EN_RXADDR` 寄存器中的位启用。默认情况下只启用数据通道 0 和 1。每个数据通道地址都配置在 `RX_ADDR_PX` 寄存器中。
+
+> 注意：始终确保所有数据通道具有不同的地址。
+
+每个通道最多可以有一个 5 字节的可配置地址。数据通道 0 有一个唯一的 5 字节地址。数据通道 1 - 5 共享四个最重要的地址字节。LSByte 对于所有六个通道必须是唯一的。<u>图 13</u> 是数据通道 0 - 5 地址配置的例子。
+
+图 13. 数据通道 0 - 5 地址
+
+![][P13]
+
+
+使用 MultiCeiver™ 和增强型 ShockBurst™ 的 PRX 从多个 PTX 接收数据包。为了确保来自 PRX 的 ACK 数据包被发送到正确的 PTX，PRX 将收到数据包的数据通道地址作为发送 ACK 数据包时的 TX 地址。<u>图 14</u> 是 PRX 和 PTX 的地址配置示例。在 PRX 上，定义为通道地址的 `RX_ADDR_Pn` 必须是唯一的。在 PTX 上，`TX_ADDR` 必须与 `RX_ADDR_P0` 相同，并作为指定通道的地址。
+
+图 14. MultiCeiver™ 下数据通道地址示例
+
+![][P14]
+
+只有当数据通道接收到完整的数据包时，其他数据通道才能开始接收数据。当多个 PTX 传输到 PRX 时，可以使用 ARD 来歪曲（skrew）自动重发，以便它们仅阻塞对方一次。
+
+
+## 7.7. 增强型 ShockBurst™ 时序
+
+本节介绍增强型 ShockBurst™ 的时序以及所有模式如何启动和操作。增强型 ShockBurst™ 时序通过数据和控制接口（Data and Control interface）进行控制。
+
+nRF24L01+ 可以设置为静态模式或自主模式（内部状态机控制事件）。每个自主模式／序列以 **IRQ** 引脚上的中断结束。所有中断都在时序图中表示为 IRQ 事件。
+
+图 15. 无应答时发送一个数据包
+
+![][P15]
+
+以下等式计算各种时间测量值：
+
+表 19. 时间公式
+
+![][T19]
+
+图 16. 上传一个数据包的增强型 ShockBurst™ 时序（2 Mbps）
+
+![][P16]
+
+<u>图 16</u> 显示了一个数据包的发送和应答。PRX 器件激活 RX 模式（**CE** = 1），PTX 器件在 TX 模式下激活（**CE** = 1，最小 10 μs）。 经过 130 μs 后，传输开始并在经过 T<sub>OA</sub> 后结束。
+
+当传输结束时，PTX 设备自动切换到 RX 模式，等待来自 PRX 设备的 ACK 数据包。当 PRX 设备接收到数据包时，它为主 MCU 设置中断，并切换到 TX 模式发送 ACK。 在 PTX 设备收到 ACK 包后，向 MCU 设置中断，并从 TX FIFO 中清除该包。
+
+在<u>图 17</u> 中，显示 PTX 在第一个 ACK 包丢失时的包发送时序。当 ACK 包失败时的完整发送情况参见<u>图 20</u>。
+
+图 17. 第一个 ACK 包丢失时的增强型 ShockBust™ 时序（2 Mbps）
+
+![][P17]
 
 
 
@@ -700,7 +843,12 @@ ACK 数据包可以包含从 PRX 到 PTX 的可选 Payload。为了使用此功�
 
 
 
-    2018.4.4. 搁
+
+
+
+
+
+    2018.4.8. 搁
 
 
 
@@ -710,15 +858,6 @@ ACK 数据包可以包含从 PRX 到 PTX 的可选 Payload。为了使用此功�
 -----------------------
 
 
-
-7.4.2 Auto Retransmission (ART)
-Revision 1.0 Page 5 of 78
-nRF24L01+ Product Specification
-## 7.5 增强型 ShockBurst flowcharts 
-7.5.1 PTX operation
-7.5.2 PRX operation 
-## 7.6 MultiCeiver™
-## 7.7 增强型 ShockBurst™ timing 
 ## 7.8 增强型 ShockBurst™ transaction diagram 
 7.8.1 Single transaction with ACK packet and interrupts
 7.8.2 Single transaction with a lost packet 
@@ -803,6 +942,7 @@ Configuration. 78
 *[TX]:发送  
 *[TX_DS]:已发送数据  
 *[基带协议引擎]:baseband protocol engine
+*[Payload]:有效数据
 
 <!-- 图片链接 -->
 [P1]:https://us1.myximage.com/2018/04/03/91f68a55e9f4b4ee578c4680ab23ee14.png "nRF24L01+ block diagram"
@@ -819,12 +959,36 @@ Configuration. 78
 
 [P9]:https://us1.myximage.com/2018/04/04/20e5814f4f01c0500ca270c6f4a91438.png "TX FIFO (PRX) with pending payloads"
 
+[P10]:https://us1.myximage.com/2018/04/08/3ecaf3befae3d05c67f6b68310d847ec.png "PTX operations in Enhanced ShockBurst™"
+
+[P11]:https://us1.myximage.com/2018/04/08/024fc88c9e92f2e337a83af4832a30fa.png "PRX operations in Enhanced ShockBurst™"
+
+[P12]:https://us1.myximage.com/2018/04/08/0dae118c95722c1a0cd559fa6f7db55f.png "PRX using MultiCeiver™"
+
+[P13]:https://us1.myximage.com/2018/04/08/f81c078acb761ff155d2b460cbc96b0d.png "Addressing data pipes 0-5"
+
+[P14]:https://us1.myximage.com/2018/04/08/33a6b70f749fb6a962349791d36a8176.png "Example of data pipe addressing in MultiCeiver™"
+
+[P15]:https://us1.myximage.com/2018/04/08/5b8dcf2a08e10adfd151bc71319fda9f.png "Transmitting one packet with NO_ACK on"
+
+[P16]:https://us1.myximage.com/2018/04/08/1f218dad53fc9521319de8f1e69511d9.png "Timing of Enhanced ShockBurst™ for one packet upload (2Mbps)"
+
+[P17]:https://us1.myximage.com/2018/04/08/360977c60c12cf14512e7a89f00c9e38.png "Timing of Enhanced ShockBurst™ when the first ACK packet is lost (2Mbps)"
+
+
+
+
+
+
+
+
 [T9]:https://us1.myximage.com/2018/04/04/a38f922805032f67676a0ad0bbc93609.png 
 
 [T10]:https://us1.myximage.com/2018/04/04/7e7c858ea0f7bec611468f8137fc2218.png 
 
 [T16]:https://us1.myximage.com/2018/04/04/351e0079a57d5beb631bb5a6aa954fa9.png 
 
+[T19]:https://us1.myximage.com/2018/04/08/ee6c37fe9eb10a45b70dfd360c8a5228.png
 
 <!--  
 ## 1. 介绍
