@@ -29,6 +29,6 @@ keywords: C语言
 - 存储器映射的硬件寄存器。因为每次对它的读写都可能有不同意义。
 
 参考链接：  
-https://blog.csdn.net/bigloomy/article/details/6645810  
-https://blog.csdn.net/bigloomy/article/details/6645810
+1. [C语言的那些小秘密之volatile](https://blog.csdn.net/bigloomy/article/details/6645810) 
+2. [volatile变量](https://blog.csdn.net/suhuaiqiang_janlay/article/details/5942659)
 
