@@ -325,9 +325,9 @@ CANopenNode ~~目前~~很久以前是针对具有 Microchip C18 编译器的 8 �
     2018/3/26 更新
 
 
-[L1]:https://qingwang.li/2018/03/21/CANopenNode-learn-1/  
-[L2]:https://qingwang.li/2018/03/22/CANopenNode-learn-2/  
-[L3]:https://qingwang.li/2018/03/23/CANopenNode-learn-3/  
+[L1]:https://syauo.github.io/2018/03/21/CANopenNode-learn-1/  
+[L2]:https://syauo.github.io/2018/03/22/CANopenNode-learn-2/  
+[L3]:https://syauo.github.io/2018/03/23/CANopenNode-learn-3/  
 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  
 [R2]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Manual》 V1.10"  

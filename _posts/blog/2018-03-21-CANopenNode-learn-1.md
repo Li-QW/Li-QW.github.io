@@ -324,9 +324,9 @@ Eds 文件是一个文本文件，可以用于 CANopen 监视器。它现在有�
 ---
 2018/3/22更新，下面的部分见[CANopenNode学习（2)][L2]
 
-[L1]:https://qingwang.li/2018/03/21/CANopenNode-learn-1/
-[L2]:https://qingwang.li/2018/03/22/CANopenNode-learn-2/
-[L3]:https://qingwang.li/2018/03/23/CANopenNode-learn-3/
+[L1]:https://syauo.github.io/2018/03/21/CANopenNode-learn-1/
+[L2]:https://syauo.github.io/2018/03/22/CANopenNode-learn-2/
+[L3]:https://syauo.github.io/2018/03/23/CANopenNode-learn-3/
 
 [R1]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Turorial》  V1.10"  
 [R2]:https://sourceforge.net/projects/canopennode/files/canopennode/CANopenNode-1.10/ "《CANopenNode Manual》 V1.10"  
