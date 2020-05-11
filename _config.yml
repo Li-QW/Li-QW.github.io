@@ -27,7 +27,7 @@ email: lqw@gmx.li
 # ---------------- #
 navs:
   -
-    href: ./
+    href: https://qingwang.li
     label: 首页
     
   -
@@ -47,7 +47,7 @@ navs:
 #    label: 链接
 
   -
-    href: ./about/
+    href: https://qingwang.li/about/
     label: 关于
 
 # ---------------- #
