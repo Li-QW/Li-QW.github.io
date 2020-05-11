@@ -2,11 +2,11 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://blog.qingwang.li
+url: https://qingwang.li/blog
 date_format: "ordinal"
 title: 小我 | Syauo
 subtitle: "学贵有恒 驽马奋蹄"
-description: "可忆、可追、可鉴、可思、可怡心、可益人。"
+description: ""
 keywords: 小我, Syauo
 timezone: Asia/Shanghai
 encoding: "utf-8"
