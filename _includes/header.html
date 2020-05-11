@@ -89,6 +89,7 @@
               <span class="icon-bar"></span>
             </button>
             <nav class="site-header-nav" role="navigation">
+                <a href="https://qingwang.li" class="site-header-nav-item" target="_self" title="返回封页">返回</a>
                 {% for nav in site.navs %}
                 <a href="{{ site.url }}{{ nav.href }}" class="{% if page.menu == nav.label %} selected {% endif %} site-header-nav-item" target="{{ nav.target | default: _self }}" title="{{ nav.label }}">{{ nav.label }}</a>
                 {% endfor %}
